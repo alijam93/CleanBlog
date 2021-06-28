@@ -11,6 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CleanBlog.Client\CleanBlog.Client.csproj" />
+		<ProjectReference Include="..\CleanBlog.Service\CleanBlog.Service.csproj" />
 	</ItemGroup>
 
 </Project>
