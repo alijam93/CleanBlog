@@ -9,8 +9,4 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.7" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Settings\" />
-	</ItemGroup>
-
 </Project>

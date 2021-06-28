@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CleanBlog.Service.Interfaces
 {
-    public interface IPhotoRepository
+    public interface IPhotoService
     {
         string AddImagePost(UploadModel file);
         string AddAvatar(UploadModel file);
