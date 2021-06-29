@@ -35,7 +35,7 @@ namespace CleanBlog.Api.Controllers.Admin
         /// <summary>
         /// Get Tags which not selected in post
         /// </summary>
-        /// <param name="tagId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet(Id)]
         public async Task<ActionResult<IEnumerable<TagDTO>>> UnselectedTags(int id)
