@@ -24,12 +24,7 @@ namespace CleanBlog.Shared.Dtos
         [Required]
         [MinLength(25)]
         [MaxLength(100)]
-        public string Title { get; set; }
-        
-        [Required]
-        [MinLength(25)]
-        [MaxLength(100)]
-        public string Slug { get; set; }
+        public string Title { get; set; } 
 
         [Required]
         [MinLength(1000)]

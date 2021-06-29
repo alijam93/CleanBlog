@@ -25,7 +25,7 @@ namespace CleanBlog.Api.Controllers.Public
         /// <summary>
         /// Get comments by postId
         /// </summary>
-        /// <param name="postId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet(Id)]
         public async Task<ActionResult<CommentDTO>> CommentsByPost(int id)
