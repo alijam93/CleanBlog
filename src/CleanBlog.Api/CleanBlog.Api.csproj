@@ -10,7 +10,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
 	</ItemGroup>
@@ -19,5 +19,10 @@
 		<ProjectReference Include="..\CleanBlog.Client\CleanBlog.Client.csproj" />
 		<ProjectReference Include="..\CleanBlog.Service\CleanBlog.Service.csproj" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
 </Project>
