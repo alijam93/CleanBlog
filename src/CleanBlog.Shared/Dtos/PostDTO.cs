@@ -10,10 +10,11 @@ namespace CleanBlog.Shared.Dtos
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Slug { get; set; }
         public string Content { get; set; }
         public string Image { get; set; }
-        public int Like { get; set; }
-        public int Visitor { get; set; }
+        public int Likes { get; set; }
+        public int Visitors { get; set; }
         public DateTime Created { get; set; } 
         public IEnumerable<TagDTO> Tags { get; set; } = new HashSet<TagDTO>(); 
     }
@@ -22,8 +23,13 @@ namespace CleanBlog.Shared.Dtos
     {
         [Required]
         [MinLength(25)]
-        [MaxLength(80)]
+        [MaxLength(100)]
         public string Title { get; set; }
+        
+        [Required]
+        [MinLength(25)]
+        [MaxLength(100)]
+        public string Slug { get; set; }
 
         [Required]
         [MinLength(1000)]
