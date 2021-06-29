@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CleanBlog.Shared.Extensions;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -12,8 +14,13 @@ namespace CleanBlog.Domain.Entities
 
         [Required]
         [MinLength(25)]
-        [MaxLength(80)]
+        [MaxLength(100)]
         public string Title { get; set; }
+
+        [Required]
+        [MinLength(25)]
+        [MaxLength(100)]
+        public string Slug { get => StringExtension.FriendlyUrl(Title); }
 
         [Required]
         [MinLength(1000)]
@@ -21,8 +28,8 @@ namespace CleanBlog.Domain.Entities
         public string Content { get; set; }
 
         public string Image { get; set; }
-        public int Like { get; set; }
-        public int Visitor { get; set; }
+        public int Likes { get; set; }
+        public int Visitors { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime Created { get; set; } = DateTime.Now;

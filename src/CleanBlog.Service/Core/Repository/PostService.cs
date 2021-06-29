@@ -41,8 +41,8 @@ namespace CleanBlog.Service.Repository.Core
                 Title = _.Title,
                 Content = _.Content,
                 Image = _.Image,
-                Like = _.Like,
-                Visitor = _.Visitor,
+                Likes = _.Likes,
+                Visitors = _.Visitors,
                 Created = _.Created,
                 Tags = _.PostTags.Select(_ => new TagDTO { Name = _.Tag.Name }).ToList()
             }).ToListAsync();
@@ -63,8 +63,8 @@ namespace CleanBlog.Service.Repository.Core
                                                 Title = _.Post.Title,
                                                 Content = _.Post.Content,
                                                 Image = _.Post.Image,
-                                                Like = _.Post.Like,
-                                                Visitor = _.Post.Visitor,
+                                                Likes = _.Post.Likes,
+                                                Visitors = _.Post.Visitors,
                                                 Created = _.Post.Created,
                                                 Tags = _.Post.PostTags.Select(_ => new TagDTO { Name = _.Tag.Name }).ToList()
                                             }).ToListAsync();

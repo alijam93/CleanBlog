@@ -7,13 +7,13 @@ using System.Text;
 
 namespace CleanBlog.Domain.Entities
 {
+    // Self-referencing relationship
     public class Comment
-    { 
+    {
         [Key]
         public int Id { get; set; }
         public int? ReplyId { get; set; }
-        public int? PostId { get; set; } 
-        public int? CourseId { get; set; } 
+        public int? PostId { get; set; }
         public int UserId { get; set; }
 
         [StringLength(25)]
@@ -29,7 +29,6 @@ namespace CleanBlog.Domain.Entities
         #region navigation 
         [ForeignKey("PostId")]
         public Post Post { get; set; }
-        public Course Course { get; set; }
 
         [ForeignKey("ReplyId")]
         public Comment ParentComment { get; set; }
