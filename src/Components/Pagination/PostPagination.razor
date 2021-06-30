@@ -1,0 +1,19 @@
+﻿@if (Paging.TotalPages > 0)
+{  
+        <div aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                @foreach (var link in _links)
+                {
+                    <li @onclick="() => OnSelectedPage(link)" style="cursor: pointer;" class="page-item
+                    @(link.Enabled ? null : "disabled") @(link.Active ? "active" : null)">
+                        <a class="page-link" href="/@Url?page=@Paging.CurrentPage">@link.Text @link.Icon</a>
+                    </li>
+                }
+            </ul>
+        </div>
+}
+
+@code {
+    RenderFragment prevIcon =@<Icon Type="left" Theme="outline" />;
+    RenderFragment nextIcon =@<Icon Type="right" Theme="outline" />;
+}  
