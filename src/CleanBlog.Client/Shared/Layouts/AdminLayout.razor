@@ -1,0 +1,86 @@
+﻿@inherits LayoutComponentBase
+
+@*<AuthorizeView Policy="@Policies.IsAdmin">
+    <Authorized>
+        <div class="flex-grow-1" style="margin-top: -20px;">
+            <Layout>
+                <Sider Breakpoint="@BreakpointType.Lg"
+                       Style="height: 1000px;"
+                       CollapsedWidth="0"
+                       OnBreakpoint="broken => {}"
+                       OnCollapse="collapsed => {}">
+                    <div class="text-white p-2">
+                        <Avatar Size="large" Icon="user" Src="@context.User.FindFirst("avatar_path").Value" />
+                        <span class="nav-text">
+                            @context.User.Identity.Name
+                        </span>
+                    </div>
+                    <div class="logo" />
+                    <Menu Theme="MenuTheme.Dark"
+                          Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[]{"5"})>
+
+                        @{
+                            RenderFragment sub1Title =
+                            @<span>
+                                <Icon Type="snippets" Theme="outline" />
+                                Posts
+                            </span>;
+                        }
+
+                        <AntDesign.MenuItem RouterLink="panel/users">
+                            <Icon Type="user" Theme="outline" />
+                            <span class="nav-text">Users</span>
+                        </AntDesign.MenuItem>
+
+                        <SubMenu Key="sub1" TitleTemplate=@sub1Title>
+                            <AntDesign.MenuItem RouterLink="panel/article" Class="">
+                                <Icon Type="form" Theme="outline" />
+                                <span class="nav-text">Articles</span>
+                            </AntDesign.MenuItem>
+                            <AntDesign.MenuItem RouterLink="panel/tags">
+                                <Icon Type="number" Theme="outline" />
+                                <span class="nav-text">Tags</span>
+                            </AntDesign.MenuItem>
+                        </SubMenu>
+                        <AntDesign.MenuItem RouterLink="/">
+                            <Icon Type="redo" Theme="outline" Class="text-danger" />
+                            <span class="nav-text text-danger">Back to the Home</span>
+                        </AntDesign.MenuItem>
+                    </Menu>
+                </Sider>
+                <Layout>
+                    <Content Style="margin: 24px 16px 0;">
+                        @Body
+                    </Content>
+                </Layout>
+            </Layout>
+
+
+        </div>
+        </Authorized>
+</AuthorizeView>*@
+
+    <style>
+        #components-layout-demo-responsive .logo {
+            height: 32px;
+            margin: 16px;
+        }
+
+        .site-layout-sub-header-background {
+            background: #fff;
+        }
+
+        .site-layout-background {
+            background: #fff;
+        }
+
+        @@media (max-width: 1090px) {
+            .ant-dropdown {
+                visibility: collapse;
+            }
+        }
+    </style>
+
+    @code {
+        bool collapsed = false;
+    }

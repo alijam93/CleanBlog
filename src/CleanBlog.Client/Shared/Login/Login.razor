@@ -1,0 +1,136 @@
+﻿@using CleanBlog.Shared.Identity.Account
+@inject IAuthService AuthService
+@inject NavigationManager navigation
+
+<div class="modal fade zoom-in @ModalClass" style="display:@ModalDisplay">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content" style="background: linear-gradient(87deg,#5e72e4,#825ee4) !important;">
+            <div class="modal-header d-flex">
+                <h5 class="modal-title text-white w-100">ورود</h5>
+                <button type="button" class="oi oi-x btn btn-danger p-1 text-light" @onclick="Close"></button>
+            </div>
+            <div class="modal-body bg-light text-primary">
+                @if (ShowErrors)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@Error</p>
+                    </div>
+                }
+
+                <div class="card">
+                    <div class="card-body">
+                        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                            <DataAnnotationsValidator />
+
+                            <div class="form-group">
+                                <label for="email-name">Email or Username</label>
+                                <InputText Id="email-name" Class="form-control" @bind-Value="loginModel.EmailOrName" />
+                                <ValidationMessage For="@(() => loginModel.EmailOrName)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <InputText Id="login-password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
+                                <ValidationMessage For="@(() => loginModel.Password)" />
+                            </div>
+                            <button type="submit" class="btn1 @submitButton">
+                                @*<Icon Type="logout" Theme="outline" />*@
+                                Login
+                            </button><br />
+
+                            <a href="register" class="pr-3">Register</a>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+<style>
+    .modal.fade .modal-dialog {
+        -webkit-transform: translate(0,0);
+        transform: translate(0,0);
+    }
+
+    .zoom-in {
+        transform: scale(0) !important;
+        opacity: 0;
+        -webkit-transition: .5s all 0s;
+        -moz-transition: .5s all 0s;
+        -o-transition: .5s all 0s;
+        transition: .5s all 0s;
+        display: block !important;
+    }
+
+        .zoom-in.show {
+            opacity: 1;
+            transform: scale(1) !important;
+            transform: none;
+        }
+</style>
+@code {
+
+    LoginModel loginModel = new();
+    private bool ShowErrors = false;
+
+    private string Error = "";
+
+    string submitButton = "";
+
+    private async Task HandleLogin()
+    {
+        DisableButton(true);
+
+        var result = await AuthService.Login(loginModel);
+
+        if (result.IsSuccessful)
+        {
+            Close();
+            //navigation.NavigateTo("/");
+            DisableButton(false);
+        }
+        else
+        {
+            Error = result.ErrorMessage;
+            ShowErrors = true;
+            DisableButton(false);
+        }
+    }
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    void DisableButton(bool status)
+    {
+        if (status == true)
+        {
+            submitButton = "button-disable";
+        }
+        else
+        {
+            submitButton = "";
+        }
+    }
+}

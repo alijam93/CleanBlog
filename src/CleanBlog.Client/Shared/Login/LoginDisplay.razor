@@ -1,0 +1,111 @@
+﻿@using CleanBlog.Shared.Dtos.Identity
+@inject HttpClient http
+@inject CleanBlog.Client.Infrastructure.Services.HttpInterceptorService Interceptor
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@implements IDisposable
+
+
+<AuthorizeView>
+    <Authorized>
+        <ul class="navbar-nav ml-5 mr-md-auto dropdown-panel">
+            <li class="nav-item active dropdown">
+                <a class="nav-link nav-title" id="navbarDropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-primary">
+                        @context.User.Identity.Name
+                        <img class="rounded-circle" src="@context.User.FindFirst("avatar_path").Value" width="32" height="28">
+                    </span>
+                </a>
+                <ul class="dropdown-menu text-right dropdown-ul" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                        <a class="dropdown-item" href="/panel/admin">
+                            @*<Icon Type="audit" Theme="outline" />*@
+                            go to panel
+                        </a>
+                    </li>
+                    <li>
+                        <a href="LogOut" class="dropdown-item" style="color: aquamarine;">
+                            @*<Icon Type="logout" Theme="outline" />*@
+                            Exit
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <ul class="navbar-nav mr-md-auto pl-4">
+            <li class="nav-item nav-item-hover active">
+                <a href="register" class="nav-link pl-2 nav-title">
+                    @*<Icon Type="user-add" Theme="outline" />*@
+                    Register
+                </a>
+            </li>
+            <li class="nav-item nav-item-hover active">
+                <a class="nav-link nav-title" @onclick="(() => Login.Open())">
+                    @*<Icon Type="login" Theme="outline" />*@
+                    Login
+                </a>
+            </li>
+        </ul>
+    </NotAuthorized>
+</AuthorizeView>
+
+<Login @ref="Login"></Login>
+
+<style>
+    .dropdown-panel li a.nav-item-hover:hover {
+        background-color: none;
+        border-bottom-color: #ff6f00;
+        border-radius: 30px;
+    }
+
+    .dropdown-panel ul.dropdown-menu {
+        margin-right: -50px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: #37474f;
+        border: 1px solid rgba(0,0,0,.15);
+    }
+
+    .dropdown-panel ul.dropdown-ul:before {
+        background: none;
+    }
+
+    .dropdown-panel ul li a.dropdown-item {
+        color: #cfd8dc;
+    }
+
+        .dropdown-panel ul li a.dropdown-item:hover {
+            color: #cfd8dc;
+            background-color: #546e7a;
+        }
+
+        .dropdown-panel ul li a.dropdown-item:focus {
+            color: #cfd8dc;
+            background-color: #607d8b;
+        }
+</style>
+
+@code{
+    Login Login { get; set; }
+    UserInfoDTO UserInfoDTO = new UserInfoDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            Interceptor.RegisterEvent();
+        }
+
+        var expireToken = await http.GetFromJsonAsync<bool>("api/accounts/expire-token");
+        if (expireToken == true)
+        {
+            navigation.NavigateTo("/logout");
+        }
+    }
+
+    public void Dispose() => Interceptor.DisposeEvent();
+}
