@@ -16,8 +16,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\CleanBlog.Components\CleanBlog.Components.csproj" />
 		<ProjectReference Include="..\CleanBlog.Shared\CleanBlog.Shared.csproj" />
-		<ProjectReference Include="..\Components\CleanBlog.Components.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
