@@ -2,6 +2,7 @@
 using CleanBlog.Service.Interfaces;
 using CleanBlog.Shared.Dtos;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,6 +28,7 @@ namespace CleanBlog.Api.Controllers.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<TagDTO>> Tags()
         {
             return await _tagService.GetTags();

@@ -1,9 +1,7 @@
 ﻿@page "/articles"
-@inject HttpClient http
-@inject IPostService PostService
-@using CleanBlog.Shared.Features.Pagination
 @using CleanBlog.Components.Pagination
-@using Microsoft.AspNetCore.WebUtilities
+@inject IPostService PostService
+@inject HttpClient http
 @inject NavigationManager navigation
 
 
@@ -33,43 +31,88 @@ else
     </div>
 
     <div class="row row-cols-1 row-cols-md-2">
-        @foreach (var post in Posts)
-        {
-            <div class="col mb-4">
-                <div class="card article-card">
-                    @if (!string.IsNullOrEmpty(post.Image))
-                    {
-                        <img src="@post.Image" class="article-img" loading="lazy" />
-                    }
-                    else
-                    {
-                        <div class="article-img"></div>
-                    }
-                    <div class="card-body article-body">
-                        <h5 class="card-title text-wrap article-title rtl">
-                            @*<a href="@($"article/{post.Id}/{FriendlyUrlExtension.GetSlugTitle(post.Title)}")" class="read-more">
-                                @post.Title
-                            </a>*@
-                        </h5>
-                        <div class="card-text d-flex bd-highlight pt-4 mb-3">
-                            <div class="mr-auto p-2 bd-highlight">
-                                @*<AntDesign.Tag Color="blue"> @post.Created.ToPersianDate()</AntDesign.Tag>*@
-                            </div>
-                            <div class="p-2 bd-highlight">
-                                @foreach (var tag in post.Tags)
-                                {
-                                    <a href="@($"tag/{tag.Name}")">
-                                        @*<AntDesign.Tag Color="purple">
-                                                @tag.Name
-                                            </AntDesign.Tag>*@
-                                    </a>
-                                }
-                            </div>
+        <div class="col mb-4">
+            <div class="card article-card">
+                <div class="article-img"></div>
+                <div class="article-body">
+                    <h5 class="card-title text-wrap rtl">
+                    </h5>
+                    <a href="">
+                        Title
+                    </a>
+                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="mr-auto p-2 bd-highlight">
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <a href="">
+                                Tag
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-        }
+        </div>   
+        <div class="col mb-4">
+            <div class="card article-card">
+                <div class="article-img"></div>
+                <div class="article-body">
+                    <h5 class="card-title text-wrap rtl">
+                    </h5>
+                    <a href="">
+                        Title
+                    </a>
+                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="mr-auto p-2 bd-highlight">
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <a href="">
+                                Tag
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        <div class="col mb-4">
+            <div class="card article-card">
+                <div class="article-img"></div>
+                <div class="article-body">
+                    <h5 class="card-title text-wrap rtl">
+                    </h5>
+                    <a href="">
+                        Title
+                    </a>
+                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="mr-auto p-2 bd-highlight">
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <a href="">
+                                Tag
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        <div class="col mb-4">
+            <div class="card article-card">
+                <div class="article-img"></div>
+                <div class="article-body">
+                    <h5 class="card-title text-wrap rtl">
+                    </h5>
+                    <a href="">
+                        Title
+                    </a>
+                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="mr-auto p-2 bd-highlight">
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <a href="">
+                                Tag
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row mt-5 justify-content-center">
@@ -77,39 +120,44 @@ else
     </div>
 }
 
-@code {
-    private List<TagDTO> Tags { get; set; } = new List<TagDTO>();
-    int pageCount = 0;
-    public string tagName;
-    public int tagId;
+<style>
+    .article-card {
+        position: relative;
+        margin: 20px;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(0,0,0,.125);
+        min-width: 0;
+        word-wrap: break-word;
+        transition-duration: 0.4s;
+    }
 
-
-    public List<PostDTO> Posts;
-    public Paging Paging { get; set; } = new Paging();
-    private PostParameters _postParameters = new PostParameters();
-
-    protected override async Task OnInitializedAsync()
-    {
-        Tags = await http.GetFromJsonAsync<List<TagDTO>>("api/admin/tags");
-        var uri = navigation.ToAbsoluteUri(navigation.Uri);
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("page", out var value))
-        {
-            pageCount = Convert.ToInt32(value);
+        .article-card:hover {
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+            transition: all 450ms ease-in-out 0s;
         }
-        await GetPostByTag(tagName, tagId);
+
+    .article-img {
+        background-image: linear-gradient(135deg, #ff7d47, #e64a19 );
+        height: 180px;
+        border-radius: 15px;
     }
 
-    private async Task SelectedPage(int page)
-    {
-        _postParameters.PageNumber = page;
-        await GetPostByTag(tagName, tagId);
-        Console.WriteLine($"page is => {page}, page count => {pageCount}");
+    .article-title {
+        height: 25px;
     }
 
-    public async Task GetPostByTag(string name, int id)
-    {
-        var pagingPost = await PostService.GetPosts(_postParameters, name, id);
-        Posts = pagingPost.Items;
-        Paging = pagingPost.Paging;
+    .article-body {
+        flex: 1 1 auto;
+        padding: .7rem;
     }
-}
+
+    .profile-img {
+        left: 0;
+        position: absolute;
+        text-align: center;
+        top: 30px;
+        width: 100%
+    }
+</style>
