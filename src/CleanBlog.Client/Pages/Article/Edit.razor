@@ -1,0 +1,244 @@
+﻿@page "/article/edit/{Id:int}/{Slug}"
+@inject NavigationManager navigation
+@inject HttpClient http
+@using System.Net.Http.Headers
+@using System.IO
+@using CleanBlog.Client.Utils.Models
+@using CleanBlog.Client.Utils.File
+@using CleanBlog.Shared.Features.File
+
+<span class="text-dark rounded mr-3 h2 font-weight-bold">
+    ویرایش مقاله
+    @*<Icon Type="edit" Theme="outline" />*@
+</span>
+<div class="m-3 mt-4 shadow-sm rounded bg-light p-2 color1">
+    <br />
+    <EditForm EditContext="editContext" OnValidSubmit="UpdateArticle">
+        <DataAnnotationsValidator />
+
+        <div class="form-group row rtl">
+            <div class="col col-md-7">
+                <InputText type="text" class="form-control w-75 rounded" @bind-Value="@Post.Title" placeholder="عنوان مقاله" />
+            </div>
+            <div class="col col-m-5">
+                <ValidationMessage For="@(() => Post.Title)" />
+            </div>
+        </div>
+        <br />
+
+        @if (!string.IsNullOrEmpty(Post.Image))
+        {
+            <div class="@invisibleSrc">
+                <button class="btn-danger rounded-circle" style="transform: translate(110px, -40px);"
+                        @onclick="() => DeleteImage(Post.Image)">
+                    <span class="text-center">X</span>
+                </button>
+                <img src="@Post.Image" class="shadow mb-3" width="100" height="70" />
+            </div>
+
+        }
+        else
+        {
+            <div class="form-group @visibleUpload">
+                <div class="form-row rtl">
+                    <div class="col-3">
+                        @if (disableUpload)
+                        {
+                            <label for="input" class="btn btn-secondary rounded-pill">
+                                @*<Icon Type="upload" Theme="outline" /> آپلود عکس*@
+                            </label>
+                        }
+                        <InputFile id="input" OnChange="@OnChangeImage" @bind-Value="@Post.Picture" class="form-control" hidden accept=".png, .jpg" />
+                    </div>
+                    <div class="col-9">
+                        <ValidationMessage For="@(() => Post.Picture)" />
+                    </div>
+                </div>
+
+                @if (imgUrl != null)
+                {
+                    <div class="d-flex flex-row shadow float-right border border-secondary bg-light rounded w-50">
+                        <img class="m-2" src="@imgUrl" style="width:60px; height: 40px;" />
+                        <p class="p-2 mt-2 text-success float-left overflow-hidden text-nowrap">@Post.FileName</p>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                }
+            </div>
+        }
+
+        @{
+            //RenderFragment noContent =@<Icon Class="text-danger" Type="exclamation-circle" Theme="outline" />;
+        }
+        @*<div class="form-group row m-4">
+            <div class="col">
+                <Select Mode="multiple"
+                        Style="width: 50%"
+                        Placeholder="حذف تگ"
+                        @bind-Values="@delTagId"
+                        HideSelected="true"
+                        TItemValue="int"
+                        TItem="string"
+                        NotFoundContent=@noContent
+                        Disabled=@disable>
+                    <SelectOptions>
+                        @foreach (var tag in PostTags.Tags)
+                        {
+                            <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
+                        }
+                    </SelectOptions>
+                </Select>
+            </div>
+            <div class="col">
+                <Select Mode="multiple"
+                        Placeholder="اضافه کردن تگ"
+                        Style="width: 50%"
+                        @bind-Values="@addTagId"
+                        NotFoundContent=@noContent
+                        TItemValue="int"
+                        TItem="string"
+                        Disabled=@disable>
+                    <SelectOptions>
+                        @foreach (var tag in Tags)
+                        {
+                            <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
+                        }
+                    </SelectOptions>
+                </Select>
+            </div>
+        </div>*@
+
+        @*<div class="form-group">
+            <SfRichTextEditor @bind-Value="@Post.Content" Placeholder="متن را وارد کنید">
+            </SfRichTextEditor>
+            <ValidationMessage For="@(() => Post.Content)" />
+        </div>*@
+        <button type="submit" class="@button" disabled="@disable">ذخیره</button>
+    </EditForm>
+</div>
+
+<style>
+    .e-richtexteditor .rte-placeholder {
+        font-family: monospace;
+        text-align: right;
+    }
+</style>
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Slug { get; set; }
+
+    PostDTO PostTags = new();
+    EditPostVM Post = new();
+    List<TagDTO> Tags = new List<TagDTO>();
+
+
+    IEnumerable<int> delTagId;
+    IEnumerable<int> addTagId;
+
+    public string imgUrl { get; set; }
+    private EditContext editContext;
+    MultipartFormDataContent content = new();
+    bool disableUpload = true;
+
+    string deletePath;
+    string invisibleSrc;
+    string visibleUpload;
+
+    string button = "btn1 font-weight-light";
+    bool disable = false;
+    string cursor = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new EditContext(Post);
+
+        Tags = await http.GetFromJsonAsync<List<TagDTO>>($"api/admin/tags/{Id}");
+        PostTags = await http.GetFromJsonAsync<PostDTO>($"api/posts/{Id}/{Slug}");
+
+        Post = await http.GetFromJsonAsync<EditPostVM>($"api/posts/{Id}/{Slug}");
+
+        editContext = new EditContext(Post);
+
+    }
+
+    async Task UpdateArticle()
+    {
+        editContext.Validate();
+
+        Post.AddTags = addTagId;
+        Post.RemoveTags = delTagId;
+
+        if (deletePath != null)
+        {
+            await http.PostAsJsonAsync($"api/photo/deleteFile", new DeleteFile { Path = deletePath });
+        }
+
+        if (Post.Picture != null)
+        {
+            var resultUpload = await http.PostAsync("api/photo/addImage", content);
+            var uploadAddress = await resultUpload.Content.ReadAsStringAsync();
+            if (resultUpload.IsSuccessStatusCode)
+            {
+                Post.Image = uploadAddress.Trim('"');
+                disableUpload = false;
+            }
+        }
+
+
+        var result = await http.PutAsJsonAsync($"api/posts/{Id}", Post);
+        var postContent = await result.Content.ReadAsStringAsync();
+        if (result.IsSuccessStatusCode)
+        {
+            Disable();
+            //navigation.NavigateTo($"article/{Id}/{FriendlyUrlExtension.GetSlugTitle(Post.Title)}");
+        }
+        else
+        {
+            await http.PostAsJsonAsync($"api/photo/deleteFile", new DeleteFile { Path = Post.Image });
+            throw new ApplicationException(postContent);
+        }
+    }
+
+
+    async Task OnChangeImage(InputFileChangeEventArgs e)
+    {
+        Post.Picture = e.File;
+        Post.FileName = e.File.Name;
+        editContext.NotifyFieldChanged(FieldIdentifier.Create(() => Post.Picture));
+
+        var format = "image/jpeg";
+        var resizedFile = await e.File.RequestImageFileAsync(format, 300, 200);
+        using var ms = resizedFile.OpenReadStream(resizedFile.Size);
+        await InvokeAsync(StateHasChanged);
+
+        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+        content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "Image", resizedFile.Name);
+        content.Add(new StringContent($"{Post.Title}"), "Name");
+
+        using var memoryStream = new MemoryStream();
+        using var fileStream = resizedFile.OpenReadStream(1024 * 1024 * 15);
+
+        await fileStream.CopyToAsync(memoryStream);
+
+        imgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+    }
+
+    void DeleteImage(string path)
+    {
+        Console.WriteLine($"before {Post.Image}");
+        deletePath = path;
+        invisibleSrc = "display-none";
+        visibleUpload = "display-block";
+        Post.Image = "";
+        Console.WriteLine($"after {Post.Image}");
+    }
+
+
+    void Disable()
+    {
+        button = "btn1-disable text-dark shadow-none";
+        disable = true;
+        cursor = "not-allowed";
+    }
+}

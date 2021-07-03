@@ -1,0 +1,52 @@
+﻿@inject HttpClient http
+@using CleanBlog.Shared.Dtos
+
+<div class="m-3 p-3 rounded-left bg-light shadow-sm">
+    <a class="comment-btn mb-3" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        <span class="oi oi-comment-square"></span>Add comment
+    </a>
+    <div class="collapse mt-4 text-primary" id="collapseExample">
+        <EditForm Model="@Comment" OnValidSubmit="SendComment">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name</label><br />
+                <InputText type="text" class="form-control text-right rounded-pill w-50 float-right" disabled="@disable" @bind-Value="Comment.UserName" placeholder="Name" />
+                <ValidationMessage For="@(() => Comment.UserName)" />
+            </div> <br /><br />
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Content</label>
+                <InputTextArea class="form-control text-right" disabled="@disable" @bind-Value="Comment.Content" rows="3"></InputTextArea>
+                <ValidationMessage For="@(() => Comment.Content)" />
+
+            </div>
+            <button type="submit" class="@button float-left" disabled="@disable" style="cursor: @cursor">Save</button>
+        </EditForm>
+    </div>
+</div>
+@code {
+    [Parameter] public int PostId { get; set; }
+    AddCommentDTO Comment = new();
+
+    string button = "btn1";
+    bool disable = false;
+    string cursor = "";
+
+    async Task SendComment()
+    {
+        var newComment = new AddCommentDTO
+        {
+            PostId = PostId,
+            UserName = Comment.UserName,
+            Content = Comment.Content
+        };
+        Console.WriteLine($" PostId={newComment.PostId}");
+        Disable();
+    }
+
+    void Disable()
+    {
+        button = "btn btn-secondary btn-lg disabled";
+        disable = true;
+        cursor = "not-allowed";
+    }
+}

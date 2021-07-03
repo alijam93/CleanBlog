@@ -1,0 +1,23 @@
+﻿@page "/panel/article"
+@layout AdminLayout
+@attribute [Authorize(Policy = Policies.IsAdmin)]
+
+
+<div class="ml-5">
+    @*<Button Type="primary">
+        <a href="/article/add">
+            <Icon Type="plus-square" Theme="outline" Style="margin: 0 10px 20px 0" />
+            Add Post
+        </a>
+    </Button>*@
+</div>
+
+<style>
+    .anticon {
+        vertical-align: 0;
+    }
+</style>
+
+@code {
+
+}

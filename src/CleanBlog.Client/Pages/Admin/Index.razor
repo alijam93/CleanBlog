@@ -1,0 +1,6 @@
+﻿@page "/panel/admin"
+@inject HttpClient Http
+@layout AdminLayout
+@attribute [Authorize(Policy = Policies.IsAdmin)]
+
+ This is Home

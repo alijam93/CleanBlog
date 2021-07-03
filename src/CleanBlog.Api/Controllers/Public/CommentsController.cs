@@ -1,4 +1,4 @@
-﻿using Blog.Shared.Identity.Auth;
+﻿using CleanBlog.Shared.Identity.Auth;
 
 using CleanBlog.Api.Controllers.Base;
 using CleanBlog.Service.Interfaces;

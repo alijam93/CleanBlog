@@ -1,0 +1,203 @@
+@page "/article/{Id:int}/{Slug}"
+@using System.Net.Http
+@using CleanBlog.Components.Article
+@inject HttpClient http
+@inject NavigationManager NavigationManager
+
+@if (Post == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="card m-3">
+        <div class="card-header" style="background-image: linear-gradient(135deg, #ff7d47, #e64a19 ); height: 300px;">
+            <h5 class="card-title text-title rtl">@Post.Title</h5>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center position-relative" style="transform: translate(20px, -40px);">
+                <div>
+                    <AuthorizeView Policy="@Policies.IsAdmin">
+                        <a type="button" class="btn btn-secondary btn-sm shadow"
+                           href=@($"/article/edit/{Post.Id}/{Slug}")>
+                            @*<Icon Type="edit" Theme="outline" />*@
+                        </a>
+                        <a type="button" class="btn btn-danger btn-sm text-white shadow ml-2"
+                           @onclick="(() => Delete.Open(Post.Id))">
+                            @*<Icon Type="close" Theme="outline" />*@
+                        </a>
+                    </AuthorizeView>
+                </div>
+                <div>
+                    <span class="mr-2 badge-pill badge-light shadow-sm">
+                        @*<Icon Type="wechat" Theme="outline" />*@
+                        @Comments.Count()
+                    </span>
+                    <span class="mr-2 badge-pill badge-light shadow-sm ">تاریخ: @Post.Created </span>
+                </div>
+            </div>
+            <div class="card-text p-4">
+                @((MarkupString)Post.Content)
+            </div>
+            <div class="mt-4">
+                @foreach (var tag in Post.Tags)
+                { 
+                    <a href="@($"tag/{tag.Name}")" >
+                        @*<AntDesign.Tag Color="blue">
+                            @tag.Name
+                        </AntDesign.Tag>*@
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column text-white">
+        <AddComment PostId="@Post.Id"></AddComment>
+        <div class="comments-container m-3 p-3 rounded-left bg-light">
+            <h1>کامنت ها</h1>
+            <ul id="comments-list" class="comments-list">
+                @foreach (var comment in Comments)
+                {
+                    <li>
+                        <div class="comment-main-level">
+                            <!-- Avatar -->
+                            <div class="comment-avatar"></div>
+                            <!-- Comment Container -->
+                            <div class="comment-box">
+                                <div class="comment-head">
+                                    <h6 class="comment-name">@comment.UserName</h6>
+                                    <AuthorizeView Policy="@Policies.IsAdmin">
+                                        <i class="oi oi-x btn btn-danger p-1 text-light shadow" @onclick="() => DeleteCommment(comment.Id)" />
+                                        <i class="oi oi-pencil btn btn-info p-1 text-light shadow" @onclick="() => GetCommentById(comment.Id)" />
+                                    </AuthorizeView>
+                                    @*<i class="oi oi-action-undo" @onclick="(() => ReplyComment.Open(comment.Id, comment.PostId))" />*@
+                                    <span class="float-left">@comment.Created</span>
+                                </div>
+                                <div class="comment-content">
+                                    @comment.Content
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var rep in comment.Replies.Where(s => s.ReplyId == comment.Id).ToList())
+                        {
+                            <!-- Comments reply -->
+                            <ul class="comments-list reply-list">
+                                <li>
+                                    <!-- Avatar -->
+                                    <div class="comment-avatar"></div>
+                                    <!-- Comment Container -->
+                                    <div class="comment-box">
+                                        <div class="comment-head">
+                                            <h6 class="comment-name">@rep.UserName</h6>
+                                            <AuthorizeView Policy="@Policies.IsAdmin">
+                                                <i class="oi oi-x btn btn-danger p-1 text-light shadow" @onclick="() => DeleteCommment(rep.Id)" />
+                                                <i class="oi oi-pencil btn btn-info p-1 text-light shadow" @onclick="() => GetCommentById(rep.Id)" />
+                                            </AuthorizeView>
+                                            <span class="float-left">@comment.Created</span>
+                                        </div>
+
+                                        <div class=" comment-content">
+                                            @rep.Content
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+}
+
+
+<UpateComment @ref="UpateComment" ModalTitle="Edit Comment">
+    <CommentBody>
+        <EditForm Model="@Comment" OnValidSubmit="@EditComment">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="exampleInputEmail1">نام</label><br />
+                <InputText type="text" class="form-control text-right w-50 float-right rounded-pill" @bind-Value="Comment.UserName" placeholder="نام" />
+            </div> <br /><br />
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Content</label>
+                <InputTextArea class="form-control text-right" @bind-Value="Comment.Content" rows="3"></InputTextArea>
+            </div>
+            <button type="submit" class="btn btn-success float-left" data-dismiss="@closeModal">Save</button>
+            <button type="button" class="btn btn-secondary">Close</button>
+        </EditForm>
+    </CommentBody>
+</UpateComment>
+
+<ReplyComment @ref="ReplyComment" ModalTitle="Reply to "></ReplyComment>
+@*<Delete @ref="Delete" ModalTitle="Delete Article"></Delete>*@
+
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Slug { get; set; }
+
+    string closeModal = "";
+
+    CommentDTO[] Comments;
+    CommentDTO Comment = new CommentDTO();
+    AddReplyDTO Reply { get; set; }
+    public PostDTO Post { get; set; }
+    private PostDTO[] Posts;
+
+    UpateComment UpateComment { get; set; }
+    ReplyComment ReplyComment { get; set; }
+    Delete Delete { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Post = await http.GetFromJsonAsync<PostDTO>($"api/posts/{Id}/{Slug}");
+        await GetCommentByPostId();
+    }
+
+    public async Task GetCommentByPostId()
+    {
+        Comments = await http.GetFromJsonAsync<CommentDTO[]>($"api/comments/{Id}");
+
+    }
+
+    public async Task GetPostByTag(int tagId)
+    {
+        if (tagId > 0)
+        {
+            Posts = await http.GetFromJsonAsync<PostDTO[]>($"api/posts/{tagId}");
+        }
+        else
+        {
+            Posts = await http.GetFromJsonAsync<PostDTO[]>("api/posts");
+
+        }
+    }
+
+    async Task AddReply(int commentId)
+    {
+        Reply = await http.GetFromJsonAsync<AddReplyDTO>($"api/comments/{commentId}");
+    }
+
+    async Task DeleteCommment(int id)
+    {
+        await http.DeleteAsync($"api/comments/{id}");
+        await GetCommentByPostId();
+    }
+
+
+    private async Task GetCommentById(int id)
+    {
+        UpateComment.Open();
+        Comment = await http.GetFromJsonAsync<CommentDTO>($"api/comments/getById/{id}");
+    }
+
+    async Task EditComment()
+    {
+        await http.PutAsJsonAsync($"api/comments/{Comment.Id}", Comment);
+        UpateComment.Close();
+        await GetCommentByPostId();
+    }
+}

@@ -1,0 +1,194 @@
+﻿@page "/register"
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject HttpClient http
+@using System.Net.Http.Headers
+@using System.IO
+@using CleanBlog.Client.Utils.Models
+@using CleanBlog.Shared.Features.File
+@using System.Text
+@using System.Text.Json
+
+<div class="row register justify-content-center">
+
+    <div class="col-md-6 col-10 pt-4">
+        <h1 class="text-white">Register</h1>
+
+        <div class="card shadow">
+            @if (ShowErrors)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @foreach (var error in Errors)
+                    {
+                        <p>@error</p>
+                    }
+                </div>
+            }
+            <div class="card-body">
+                <EditForm EditContext="editContext" OnValidSubmit="HandleRegistration">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-group">
+                        <label for="username">نام کاربری</label>
+                        <InputText Id="username" class="form-control" @bind-Value="RegisterModel.UserName" />
+                        <ValidationMessage For="@(() => RegisterModel.UserName)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email2">ایمیل</label>
+                        <InputText Id="email2" type="email" class="form-control" @bind-Value="RegisterModel.Email" />
+                        <ValidationMessage For="@(() => RegisterModel.Email)" />
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row rtl">
+                            <div class="col-3">
+                                @if (disableUpload)
+                                {
+                                    <label for="input" class="btn btn-secondary rounded-pill">
+                                        @*<Icon Type="upload" Theme="outline" />*@  عکس پروفایل
+                                    </label>
+                                }
+                                <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
+                            </div>
+                            <div class="col-9">
+                                <ValidationMessage For="() => RegisterModel.Picture" />
+                            </div>
+                        </div>
+
+                        @if (imgUrl != null)
+                        {
+                            <div class="d-flex flex-row shadow float-right border border-secondary bg-light rounded w-100">
+                                <img class="m-2" src="@imgUrl" style="width:60px; height: 40px;" />
+                                <p class="p-2 mt-2 text-success float-left overflow-hidden text-nowrap">@RegisterModel.FileName</p>
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="password1">پسورد</label>
+                        <InputText Id="password1" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
+                        <ValidationMessage For="@(() => RegisterModel.Password)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">تکرار پسورد</label>
+                        <InputText Id="password2" type="password" class="form-control" @bind-Value="RegisterModel.ConfirmPassword" />
+                        <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+                    </div>
+                    <button type="submit" class="@submitButton">
+                        ثبت نام
+                        @*<Icon Type="user-add" Theme="outline" />*@
+                    </button>
+                </EditForm>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .register {
+        margin-top: -10px;
+        padding-bottom: 200px;
+        background: linear-gradient(270deg, #d81b60, #8e24aa, #0288d1);
+        background-size: 600% 600%;
+        animation: AnimationName 30s ease infinite;
+    }
+
+    @@keyframes AnimationName {
+        0% {
+            background-position: 0% 50%
+        }
+
+        50% {
+            background-position: 100% 50%
+        }
+
+        100% {
+            background-position: 0% 50%
+        }
+    }
+</style>
+
+@code {
+
+    private RegisterVM RegisterModel = new();
+    private bool ShowErrors = false;
+    private IEnumerable<string> Errors;
+
+    public string imgUrl { get; set; }
+    private EditContext editContext;
+    MultipartFormDataContent content = new();
+    bool disableUpload = true;
+
+    string submitButton = "btn btn-primary";
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(RegisterModel);
+    }
+
+    private async Task HandleRegistration()
+    {
+        DisableButton(true);
+
+        if (RegisterModel.Picture != null)
+        {
+            var resultUpload = await http.PostAsync("api/photo/addAvatar", content);
+            var uploadAddress = await resultUpload.Content.ReadAsStringAsync();
+            if (resultUpload.IsSuccessStatusCode)
+            {
+                RegisterModel.Avatar = uploadAddress.Trim('"');
+                disableUpload = false;
+            }
+        }
+
+
+        var result = await AuthService.Register(RegisterModel);
+
+        if (result.Successful)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            await http.PostAsJsonAsync($"api/photo/deleteFile", new DeleteFile { Path = RegisterModel.Avatar });
+            Errors = result.Errors;
+            ShowErrors = true;
+            DisableButton(false);
+        }
+    }
+
+    async Task OnChangeImage(InputFileChangeEventArgs e)
+    {
+        RegisterModel.Picture = e.File;
+        RegisterModel.FileName = e.File.Name;
+        editContext.NotifyFieldChanged(FieldIdentifier.Create(() => RegisterModel.Picture));
+        var format = "image/jpeg";
+        var resizedFile = await e.File.RequestImageFileAsync(format, 300, 200);
+        using var ms = resizedFile.OpenReadStream(resizedFile.Size);
+        await InvokeAsync(StateHasChanged);
+
+        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+        content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "Image", resizedFile.Name);
+
+        using var memoryStream = new MemoryStream();
+        using var fileStream = resizedFile.OpenReadStream(1024 * 1024 * 15);
+
+        await fileStream.CopyToAsync(memoryStream);
+
+        imgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+    }
+
+    void DisableButton(bool status)
+    {
+        if (status == true)
+        {
+            submitButton = "btn btn-secondary button-disable";
+        }
+        else
+        {
+            submitButton = "btn btn-primary";
+        }
+    }
+}

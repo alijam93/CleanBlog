@@ -1,4 +1,5 @@
-﻿using Blog.Shared.Identity.Auth;
+﻿
+using CleanBlog.Shared.Identity.Auth;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

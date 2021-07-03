@@ -1,6 +1,6 @@
 using AutoMapper;
 
-using Blog.Shared.Identity.Auth;
+using CleanBlog.Shared.Identity.Auth;
 
 using CleanBlog.Data;
 using CleanBlog.Domain.Identity;

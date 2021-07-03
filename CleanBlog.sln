@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanBlog.Shared", "src\Cle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanBlog.Api", "src\CleanBlog.Api\CleanBlog.Api.csproj", "{85EBAC36-D478-46B4-8D98-4778567CBA29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Components", "src\Components\Components.csproj", "{E28E2614-B7EF-47BF-A3DA-9937EA38D90A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanBlog.Components", "src\Components\CleanBlog.Components.csproj", "{E28E2614-B7EF-47BF-A3DA-9937EA38D90A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

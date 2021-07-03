@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Shared.Identity.Auth
+namespace CleanBlog.Shared.Identity.Auth
 {
     public class PermissionRequirement : IAuthorizationRequirement
     {

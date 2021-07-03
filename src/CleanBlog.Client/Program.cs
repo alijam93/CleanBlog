@@ -1,10 +1,9 @@
 using Blazored.LocalStorage;
 
-using Blog.Shared.Identity.Auth;
-
 using CleanBlog.Client.Infrastructure;
 using CleanBlog.Client.Infrastructure.Services;
 using CleanBlog.Client.Infrastructure.Services.Interfaces;
+using CleanBlog.Shared.Identity.Auth;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -41,6 +40,7 @@ namespace CleanBlog.Client
             builder.Services.AddScoped<HttpInterceptorService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<IPostService, PostService>();
 
             builder.Services.AddAuthorizationCore(config =>
             {

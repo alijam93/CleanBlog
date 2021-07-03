@@ -1,11 +1,10 @@
-﻿using Blog.Shared.Identity.Auth;
-
-using CleanBlog.Api.Controllers.Base;
+﻿using CleanBlog.Api.Controllers.Base;
 using CleanBlog.Service.Interfaces;
 using CleanBlog.Shared.Dtos;
 using CleanBlog.Shared.Extensions;
 using CleanBlog.Shared.Features.File;
 using CleanBlog.Shared.Features.Pagination;
+using CleanBlog.Shared.Identity.Auth;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

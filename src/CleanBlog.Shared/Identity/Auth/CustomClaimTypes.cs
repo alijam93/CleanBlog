@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Service.Authorization
+namespace CleanBlog.Shared.Identity.Auth
 {
     public class CustomClaimTypes
     {

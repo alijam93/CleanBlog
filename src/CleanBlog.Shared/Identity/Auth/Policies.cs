@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blog.Shared.Identity.Auth
+namespace CleanBlog.Shared.Identity.Auth
 {
     public static class Policies
     {
