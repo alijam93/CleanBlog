@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanBlog.Api.Controllers.Base
 {
-    [Authorize(Policy = Policies.IsAdmin)]
+    //[Authorize(Policy = Policies.IsAdmin)]
     [ApiController]
     [Route("api/admin/[controller]")]
     public class AdminControllerBase : ControllerBase

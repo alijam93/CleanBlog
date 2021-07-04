@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using MudBlazor.Services;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -34,6 +36,7 @@ namespace CleanBlog.Client
 
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddHttpClientInterceptor();
+            builder.Services.AddMudServices();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddScoped<RefreshTokenService>();

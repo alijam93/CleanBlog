@@ -35,32 +35,35 @@ else
             <div class="card article-card">
                 <div class="article-img"></div>
                 <div class="article-body">
-                    <h5 class="card-title text-wrap rtl">
+                    <h5 class="article-title text-wrap">
+                        <a href="">
+                            Title
+                        </a>
                     </h5>
-                    <a href="">
-                        Title
-                    </a>
                     <div class="card-text d-flex bd-highlight pt-4 mb-3">
                         <div class="mr-auto p-2 bd-highlight">
                         </div>
                         <div class="p-2 bd-highlight">
-                            <a href="">
-                                Tag
-                            </a>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                                       Link="aref">Secondary</MudButton>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                                       Link="aref">Secondary</MudButton>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                                       Link="aref">Secondary</MudButton>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
+        </div>
         <div class="col mb-4">
             <div class="card article-card">
                 <div class="article-img"></div>
                 <div class="article-body">
-                    <h5 class="card-title text-wrap rtl">
+                    <h5 class="article-title text-wrap">
+                        <a href="">
+                            Title
+                        </a>
                     </h5>
-                    <a href="">
-                        Title
-                    </a>
                     <div class="card-text d-flex bd-highlight pt-4 mb-3">
                         <div class="mr-auto p-2 bd-highlight">
                         </div>
@@ -76,11 +79,11 @@ else
             <div class="card article-card">
                 <div class="article-img"></div>
                 <div class="article-body">
-                    <h5 class="card-title text-wrap rtl">
+                    <h5 class="article-title text-wrap">
+                        <a href="">
+                            Title
+                        </a>
                     </h5>
-                    <a href="">
-                        Title
-                    </a>
                     <div class="card-text d-flex bd-highlight pt-4 mb-3">
                         <div class="mr-auto p-2 bd-highlight">
                         </div>
@@ -96,11 +99,11 @@ else
             <div class="card article-card">
                 <div class="article-img"></div>
                 <div class="article-body">
-                    <h5 class="card-title text-wrap rtl">
+                    <h5 class="article-title text-wrap">
+                        <a href="">
+                            Title
+                        </a>
                     </h5>
-                    <a href="">
-                        Title
-                    </a>
                     <div class="card-text d-flex bd-highlight pt-4 mb-3">
                         <div class="mr-auto p-2 bd-highlight">
                         </div>
@@ -119,45 +122,3 @@ else
         <PostPagination Url="articles" Paging="Paging" Spread="3" SelectedPage="SelectedPage" />
     </div>
 }
-
-<style>
-    .article-card {
-        position: relative;
-        margin: 20px;
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        border: 1px solid rgba(0,0,0,.125);
-        min-width: 0;
-        word-wrap: break-word;
-        transition-duration: 0.4s;
-    }
-
-        .article-card:hover {
-            box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
-            transition: all 450ms ease-in-out 0s;
-        }
-
-    .article-img {
-        background-image: linear-gradient(135deg, #ff7d47, #e64a19 );
-        height: 180px;
-        border-radius: 15px;
-    }
-
-    .article-title {
-        height: 25px;
-    }
-
-    .article-body {
-        flex: 1 1 auto;
-        padding: .7rem;
-    }
-
-    .profile-img {
-        left: 0;
-        position: absolute;
-        text-align: center;
-        top: 30px;
-        width: 100%
-    }
-</style>

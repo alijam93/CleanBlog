@@ -39,6 +39,7 @@ namespace CleanBlog.Service.Repository.Core
             {
                 Id = _.Id,
                 Title = _.Title,
+                Slug = _.Slug,
                 Content = _.Content,
                 Image = _.Image,
                 Likes = _.Likes,
@@ -61,6 +62,7 @@ namespace CleanBlog.Service.Repository.Core
                                             {
                                                 Id = _.Post.Id,
                                                 Title = _.Post.Title,
+                                                Slug = _.Post.Slug,
                                                 Content = _.Post.Content,
                                                 Image = _.Post.Image,
                                                 Likes = _.Post.Likes,

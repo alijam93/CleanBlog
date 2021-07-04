@@ -1,0 +1,36 @@
+﻿.article-card {
+    position: relative;
+    margin: 20px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,.125);
+    min-width: 0;
+    word-wrap: break-word;
+    transition-duration: 0.4s;
+}
+
+    .article-card:hover {
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.075) !important;
+        transition: all 450ms ease-in-out 0s;
+    }
+
+.article-img {
+    background-image: linear-gradient(135deg, #ff7d47, #e64a19 );
+    height: 180px;
+    border-radius: 15px;
+}
+
+.article-title {
+    margin-bottom: .5rem;
+}
+
+    .article-title > a {
+        color: #2196F3;
+        text-decoration: none;
+    }
+
+.article-body {
+    flex: 1 1 auto;
+    padding: .7rem;
+}

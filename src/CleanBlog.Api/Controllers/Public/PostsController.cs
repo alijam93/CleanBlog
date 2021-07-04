@@ -79,7 +79,7 @@ namespace CleanBlog.Api.Controllers.Public
         /// <param name="post"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = Policies.IsAdmin)]
+        //[Authorize(Policy = Policies.IsAdmin)]
         public async Task<ActionResult<AddPostDTO>> AddPost(AddPostDTO post)
         {
             await _postService.AddPost(post);
@@ -93,7 +93,7 @@ namespace CleanBlog.Api.Controllers.Public
         /// <param name="post"></param>
         /// <returns></returns>
         [HttpPut(Id)]
-        [Authorize(Policy = Policies.IsAdmin)]
+        //[Authorize(Policy = Policies.IsAdmin)]
         public async Task<ActionResult<EditPostDTO>> EditPost(int id, EditPostDTO post)
         {
             if (id != post.Id) return BadRequest();
@@ -111,7 +111,7 @@ namespace CleanBlog.Api.Controllers.Public
         }
 
         [HttpDelete(Id)]
-        [Authorize(Policy = Policies.IsAdmin)]
+        //[Authorize(Policy = Policies.IsAdmin)]
         public async Task<IActionResult> DeletePost(int id)
         {
             await _postService.DeletePost(id);
