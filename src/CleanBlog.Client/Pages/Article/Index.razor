@@ -11,113 +11,69 @@
 }
 else
 {
-
-    <div class="d-flex justify-content-end mt-2 mr-5">
-        @*<RadioGroup @bind-Value="@tagId" Size="small" ButtonStyle="solid">
-
-                <Radio RadioButton Value="0"><p @onclick="() => GetPostByTag(null, 0)">نمایش همه پست ها</p> </Radio>
-                @foreach (var tag in Tags)
-                    {
-                    <Radio RadioButton Value="@tag.Id"><p @onclick="() => GetPostByTag(tag.Name, tag.Id)">@tag.Name</p> </Radio>
-                    }
-            </RadioGroup>*@
+    <div class="d-flex flex-nowrap ml-5 pt-3">
         <div>
-            <p class="badge badge-light shadow-sm text-center ml-2">
+            <p class="badge bg-light text-dark shadow-sm text-center">
                 <strong class="h6">
-                    @*<Icon Type="tags" Class="pl-1" Theme="outline" />تگ ها:*@
+                    <i class="bi bi-tags-fill pr-1"></i>
+                    tags
                 </strong>
             </p>
+        </div>
+        <div>
+            <MudContainer>
+                <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Class="mr-2"
+                           OnClick="() => GetPostByTag(null)">All</MudButton>
+                @foreach (var tag in Tags)
+                {
+                    <MudButton Variant="Variant.Filled" Size="Size.Small"
+                               OnClick="() => GetPostByTag(tag.Name)" Class="mr-2">
+                        @tag.Name
+                    </MudButton>
+                }
+            </MudContainer>
         </div>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2">
-        <div class="col mb-4">
-            <div class="card article-card">
-                <div class="article-img"></div>
-                <div class="article-body">
-                    <h5 class="article-title text-wrap">
-                        <a href="">
-                            Title
-                        </a>
-                    </h5>
-                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
-                        <div class="mr-auto p-2 bd-highlight">
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
-                                       Link="aref">Secondary</MudButton>
-                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
-                                       Link="aref">Secondary</MudButton>
-                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
-                                       Link="aref">Secondary</MudButton>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col mb-4">
-            <div class="card article-card">
-                <div class="article-img"></div>
-                <div class="article-body">
-                    <h5 class="article-title text-wrap">
-                        <a href="">
-                            Title
-                        </a>
-                    </h5>
-                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
-                        <div class="mr-auto p-2 bd-highlight">
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <a href="">
-                                Tag
+        @foreach (var post in Posts)
+        {
+            <div class="col mb-4">
+                <div class="article-card">
+                    @if (!string.IsNullOrEmpty(post.Image))
+                    {
+                        <img src="@post.Image" class="article-img" loading="lazy" />
+                    }
+                    else
+                    {
+                        <div class="article-img"></div>
+                    }
+                    <div class="article-body">
+                        <h5 class="article-title text-wrap">
+                            <a href="@($"article/{post.Id}/{post.Slug}")">
+                                @post.Title
                             </a>
+                        </h5>
+                        <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                            <div class="mr-auto p-2 bd-highlight">
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                @foreach (var tag in post.Tags)
+                                {
+                                    <MudButton Variant="Variant.Outlined"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               Link="@($"tag/{tag.Name}")">
+                                        @tag.Name
+                                    </MudButton>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>        <div class="col mb-4">
-            <div class="card article-card">
-                <div class="article-img"></div>
-                <div class="article-body">
-                    <h5 class="article-title text-wrap">
-                        <a href="">
-                            Title
-                        </a>
-                    </h5>
-                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
-                        <div class="mr-auto p-2 bd-highlight">
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <a href="">
-                                Tag
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        <div class="col mb-4">
-            <div class="card article-card">
-                <div class="article-img"></div>
-                <div class="article-body">
-                    <h5 class="article-title text-wrap">
-                        <a href="">
-                            Title
-                        </a>
-                    </h5>
-                    <div class="card-text d-flex bd-highlight pt-4 mb-3">
-                        <div class="mr-auto p-2 bd-highlight">
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <a href="">
-                                Tag
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
-
     <div class="row mt-5 justify-content-center">
         <PostPagination Url="articles" Paging="Paging" Spread="3" SelectedPage="SelectedPage" />
     </div>

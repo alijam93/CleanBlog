@@ -50,13 +50,14 @@ namespace CleanBlog.Client.Infrastructure.Services
             return pagingResponse;
         }
 
-        public async Task<PagingResponse<PostDTO>> GetPosts(PostParameters postParameters, string name, int tagId)
+        public async Task<PagingResponse<PostDTO>> GetPosts(PostParameters postParameters, string name)
         {
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = postParameters.PageNumber.ToString()
             };
-            if (tagId > 0)
+            //if (tagId > 0)
+            if (name != null)
             {
                 _url = $"api/posts/{name}";
             }

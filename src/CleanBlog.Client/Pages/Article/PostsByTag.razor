@@ -11,22 +11,23 @@
 }
 else
 {
-    <div class="d-flex justify-content-end mt-2 mr-5">
-        <p class="badge badge-info shadow-sm text-center ml-2"><strong class="h6">@Name</strong></p>
+    <div class="d-flex flex-nowrap ml-5 pt-3">
         <div>
-            <p class="badge badge-light shadow-sm text-center ml-2">
+            <p class="badge bg-light text-dark shadow-sm text-center">
                 <strong class="h6">
-                    @*<Icon Type="tag" Class="pl-1" Theme="outline" />*@تگ سرج شده :
+                    <i class="bi bi-tags-fill pr-1"></i>
+                    tag
                 </strong>
             </p>
         </div>
+        <p class="badge bg-info text-dark shadow-sm text-center ml-2"><strong class="h6">@Name</strong></p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2">
         @foreach (var post in Posts)
         {
             <div class="col mb-4">
-                <div class="card article-card">
+                <div class="article-card">
                     @if (!string.IsNullOrEmpty(post.Image))
                     {
                         <img src="@post.Image" class="article-img" loading="lazy" />
@@ -35,24 +36,24 @@ else
                     {
                         <div class="article-img"></div>
                     }
-                    <div class="card-body article-body">
-                        <h5 class="card-title text-wrap article-title rtl">
-                            @*<a href="@($"article/{post.Id}/{FriendlyUrlExtension.GetSlugTitle(post.Title)}")" class="read-more">
+                    <div class="article-body">
+                        <h5 class="article-title text-wrap">
+                            <a href="@($"article/{post.Id}/{post.Slug}")">
                                 @post.Title
-                            </a>*@
+                            </a>
                         </h5>
                         <div class="card-text d-flex bd-highlight pt-4 mb-3">
                             <div class="mr-auto p-2 bd-highlight">
-                                @*<AntDesign.Tag Color="blue"> @post.Created.ToPersianDate()</AntDesign.Tag>*@
                             </div>
                             <div class="p-2 bd-highlight">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <a href="@($"tag/{tag.Name}")">
-                                        @*<AntDesign.Tag Color="purple">
-                                            @tag.Name
-                                        </AntDesign.Tag>*@
-                                    </a>
+                                    <MudButton Variant="Variant.Outlined"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               Link="@($"tag/{tag.Name}")">
+                                        @tag.Name
+                                    </MudButton>
                                 }
                             </div>
                         </div>

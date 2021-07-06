@@ -17,28 +17,28 @@ namespace CleanBlog.Client.Pages.Article
         [Parameter] public int Id { get; set; }
         [Parameter] public string Slug { get; set; }
 
-        protected string closeModal = "";
+        public string closeModal = "";
 
-        protected CommentDTO[] Comments;
+        protected List<CommentDTO> Comments = new();
         protected CommentDTO Comment = new();
         protected AddReplyDTO Reply { get; set; }
-        protected PostDTO Post { get; set; }
+        protected AddCommentDTO AddComment { get; set; }
+        protected PostDTO Post = new();
         protected PostDTO[] Posts;
 
-        protected UpateComment UpateComment { get; set; }
-        protected ReplyComment ReplyComment { get; set; }
-        protected Delete Delete { get; set; }
-
+        private UpateComment UpateComment { get; set; }
+        private ReplyComment ReplyComment { get; set; }
+        private Delete Delete { get; set; }
         protected async override Task OnInitializedAsync()
         {
             Post = await http.GetFromJsonAsync<PostDTO>($"{Endpoints.Posts}{Id}/{Slug}");
+
             await GetCommentByPostId();
         }
 
         public async Task GetCommentByPostId()
         {
-            Comments = await http.GetFromJsonAsync<CommentDTO[]>(Endpoints.Comments + Id);
-
+            Comments = await http.GetFromJsonAsync<List<CommentDTO>>(Endpoints.Comments + Id);
         }
 
         public async Task GetPostByTag(int tagId)
@@ -69,12 +69,12 @@ namespace CleanBlog.Client.Pages.Article
         private async Task GetCommentById(int id)
         {
             UpateComment.Open();
-            Comment = await http.GetFromJsonAsync<CommentDTO>(Endpoints.Comments+ $"getById/{id}");
+            Comment = await http.GetFromJsonAsync<CommentDTO>($"{Endpoints.Comments}getById/{id}");
         }
 
         async Task EditComment()
         {
-            await http.PutAsJsonAsync(Endpoints.Comments +Comment.Id, Comment);
+            await http.PutAsJsonAsync(Endpoints.Comments + Comment.Id, Comment);
             UpateComment.Close();
             await GetCommentByPostId();
         }

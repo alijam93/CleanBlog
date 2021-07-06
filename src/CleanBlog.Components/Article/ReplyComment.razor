@@ -1,11 +1,12 @@
-﻿@*@inject HttpClient http
+﻿@inject HttpClient http
+@using CleanBlog.Shared.Dtos
 
 <div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header d-flex bg-info">
-                <button type="button" class="oi oi-circle-x btn btn-danger p-1 text-light shadow" @onclick="Close"></button>
+            <div class="modal-header bg-info">
                 <h5 class="modal-title text-white w-100">@ModalTitle</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
             <div class="modal-body bg-light text-primary">
                 <EditForm Model="@Comment" OnValidSubmit="SendReply">
@@ -20,8 +21,10 @@
                         <InputTextArea class="form-control text-right" @bind-Value="Comment.Content" rows="3"></InputTextArea>
                         <ValidationMessage For="@(() => Comment.Content)" />
                     </div>
-                    <button type="submit" class="btn btn-success float-left">Save</button>
-                    <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
+                    <div class="mt-5">
+                        <button type="submit" class="btn btn-success float-left">Save</button>
+                        <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
+                    </div>
                 </EditForm>
             </div>
         </div>
@@ -80,4 +83,4 @@
         ShowBackdrop = false;
         StateHasChanged();
     }
-}*@
+}

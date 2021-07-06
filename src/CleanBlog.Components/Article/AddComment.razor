@@ -2,8 +2,8 @@
 @using CleanBlog.Shared.Dtos
 
 <div class="m-3 p-3 rounded-left bg-light shadow-sm">
-    <a class="comment-btn mb-3" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-        <span class="oi oi-comment-square"></span>Add comment
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Add comment
     </a>
     <div class="collapse mt-4 text-primary" id="collapseExample">
         <EditForm Model="@Comment" OnValidSubmit="SendComment">
@@ -19,7 +19,7 @@
                 <ValidationMessage For="@(() => Comment.Content)" />
 
             </div>
-            <button type="submit" class="@button float-left" disabled="@disable" style="cursor: @cursor">Save</button>
+            <button type="submit" class="@button mt-5" disabled="@disable" style="cursor: @cursor">Save</button>
         </EditForm>
     </div>
 </div>
@@ -27,25 +27,26 @@
     [Parameter] public int PostId { get; set; }
     AddCommentDTO Comment = new();
 
-    string button = "btn1";
+    string button = "btn btn-success";
     bool disable = false;
     string cursor = "";
 
     async Task SendComment()
     {
-        var newComment = new AddCommentDTO
+        var comment = new AddCommentDTO
         {
             PostId = PostId,
             UserName = Comment.UserName,
             Content = Comment.Content
         };
-        Console.WriteLine($" PostId={newComment.PostId}");
+        await http.PostAsJsonAsync($"api/comments", comment);
+
         Disable();
     }
 
     void Disable()
     {
-        button = "btn btn-secondary btn-lg disabled";
+        button = "btn btn-secondary disabled";
         disable = true;
         cursor = "not-allowed";
     }

@@ -1,0 +1,18 @@
+﻿.card {
+    border-radius: 1rem !important;
+}
+
+.card-header {
+    background-image: linear-gradient(135deg, #ff7d47, #e64a19 );
+    height: 300px;
+    padding: .5rem 1rem;
+    border-radius: 1rem !important;
+}
+
+.card-title {
+    color: #eeeeee;
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 10rem;
+    text-shadow: 2px 2px 5px #757575;
+}

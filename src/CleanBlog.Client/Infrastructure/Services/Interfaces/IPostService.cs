@@ -12,7 +12,7 @@ namespace CleanBlog.Client.Infrastructure.Services.Interfaces
     public interface IPostService
     {
         Task<PagingResponse<PostDTO>> GetPostsByTag(PostParameters postParameters, string name);
-        Task<PagingResponse<PostDTO>> GetPosts(PostParameters postParameters, string name, int tagId);
+        Task<PagingResponse<PostDTO>> GetPosts(PostParameters postParameters, string name);
         Task<PostDTO> GetPostsByById(int id, string slug);
     }
 }

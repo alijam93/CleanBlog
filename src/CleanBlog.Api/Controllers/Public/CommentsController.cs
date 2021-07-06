@@ -80,7 +80,7 @@ namespace CleanBlog.Api.Controllers.Public
         /// <param name="comment"></param>
         /// <returns></returns>
         [HttpPut(Id)]
-        [Authorize(Policy = Policies.IsAdmin)]
+        //[Authorize(Policy = Policies.IsAdmin)]
         public async Task<ActionResult<EditCommentDTO>> EditComment(int id, EditCommentDTO comment)
         {
             if (id != comment.Id) return BadRequest();
@@ -98,7 +98,7 @@ namespace CleanBlog.Api.Controllers.Public
         }
 
         [HttpDelete(Id)]
-        [Authorize(Policy = Policies.IsAdmin)]
+        //[Authorize(Policy = Policies.IsAdmin)]
         public async Task<ActionResult> DeleteComment(int id)
         {
             await _commentService.DeleteComment(id);

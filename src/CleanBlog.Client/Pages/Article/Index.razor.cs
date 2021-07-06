@@ -17,8 +17,6 @@ namespace CleanBlog.Client.Pages.Article
         private TagDTO[] Tags;
         int pageCount = 0;
         public string tagName;
-        public int tagId;
-
 
         public List<PostDTO> Posts;
         public Paging Paging { get; set; } = new Paging();
@@ -33,19 +31,19 @@ namespace CleanBlog.Client.Pages.Article
             {
                 pageCount = Convert.ToInt32(value);
             }
-            await GetPostByTag(tagName, tagId); 
+            await GetPostByTag(tagName); 
         }
 
         private async Task SelectedPage(int page)
         {
             _postParameters.PageNumber = page;
-            await GetPostByTag(tagName, tagId);
+            await GetPostByTag(tagName);
             Console.WriteLine($"page is => {page}, page count => {pageCount}");
         }
 
-        public async Task GetPostByTag(string name, int id)
+        public async Task GetPostByTag(string name)
         {
-            var pagingPost = await PostService.GetPosts(_postParameters, name, id);
+            var pagingPost = await PostService.GetPosts(_postParameters, name );
             Posts = pagingPost.Items;
             Paging = pagingPost.Paging;
         }
