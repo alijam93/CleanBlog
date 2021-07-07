@@ -21,12 +21,14 @@ namespace CleanBlog.Service.Core
             string extension = Path.GetExtension(file.Image.FileName);
             string newFileName = $"{Guid.NewGuid()}{extension}";
 
-            var folderName = Path.Combine("wwwroot", "images/profile", DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MM"));
+            string floderDate = DateTime.Now.ToString("yyyy/") + DateTime.Now.ToString("MM");
+            var folderName = Path.Combine("wwwroot/", "images/profile/", floderDate);
             if (!Directory.Exists(folderName))
             {
                 Directory.CreateDirectory(folderName);
             }
-            string dbPath = Path.Combine(folderName, newFileName);
+
+            string dbPath = folderName + "/" + newFileName;
 
             if (file.Image.Length > 0)
             {
@@ -51,16 +53,16 @@ namespace CleanBlog.Service.Core
             string extension = Path.GetExtension(file.Image.FileName);
             string newFileName = $"{title}{extension}";
 
-            var folderName = Path.Combine("wwwroot", "images/posts", DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MM"));
+            string floderDate = DateTime.Now.ToString("yyyy/") + DateTime.Now.ToString("MM");
+            var folderName = Path.Combine("wwwroot/", "images/posts/", floderDate);
             if (!Directory.Exists(folderName))
             {
                 Directory.CreateDirectory(folderName);
             }
-            string dbPath = Path.Combine(folderName, newFileName);
+            string dbPath = folderName + "/" + newFileName;
 
             if (file.Image.Length > 0)
             {
-
                 string fullPath = Path.Combine(Directory.GetCurrentDirectory(), folderName, newFileName);
                 using var image = Image.Load(file.Image.OpenReadStream());
                 image.Mutate(x => x.Resize(300, 200));

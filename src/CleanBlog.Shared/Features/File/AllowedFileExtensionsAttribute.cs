@@ -32,7 +32,7 @@ namespace CleanBlog.Shared.Features.File
             return ValidationResult.Success;
         }
 
-        public string GetErrorMessage()
+        public static string GetErrorMessage()
         {
             return $"This extension is not allowed!";
         }

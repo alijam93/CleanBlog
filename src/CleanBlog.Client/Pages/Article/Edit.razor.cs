@@ -120,12 +120,10 @@ namespace CleanBlog.Client.Pages.Article
 
         void DeleteImage(string path)
         {
-            Console.WriteLine($"before {Post.Image}");
             deletePath = path;
             invisibleSrc = "display-none";
             visibleUpload = "display-block";
             Post.Image = "";
-            Console.WriteLine($"after {Post.Image}");
         }
 
         void Disable()
