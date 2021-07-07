@@ -17,7 +17,6 @@ namespace CleanBlog.Service.Interfaces
         Task AddPost(AddPostDTO postDTO);
         Task UpdatePost(EditPostDTO postDTO);
         Task DeletePost(int id);
-        string SendImage(UploadModel image);
         bool PostItemExists(int id);
     }
 }

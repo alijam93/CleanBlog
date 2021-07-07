@@ -176,36 +176,5 @@ namespace CleanBlog.Service.Repository.Core
         }
 
         public bool PostItemExists(int id) => _db.Posts.Any(_ => _.Id == id);
-
-        public string SendImage(UploadModel file)
-        {
-
-            string title = StringExtension.FriendlyUrl(file.Name);
-            string extension = Path.GetExtension(file.Image.FileName);
-            string newFileName = $"{title}{extension}";
-
-            var folderName = Path.Combine("wwwroot", "images/posts", DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MM"));
-            if (!Directory.Exists(folderName))
-            {
-                Directory.CreateDirectory(folderName);
-            }
-            string dbPath = Path.Combine(folderName, newFileName);
-
-            if (file.Image.Length > 0)
-            {
-
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), folderName, newFileName);
-                using var image = Image.Load(file.Image.OpenReadStream());
-                image.Mutate(x => x.Resize(300, 200));
-                //Encode here for quality
-                var encoder = new JpegEncoder()
-                {
-                    Quality = 30 //Use variable to set between 5-30 based on your requirements
-                };
-
-                image.Save(fullPath, encoder);
-            }
-            return dbPath;
-        }
     }
 }

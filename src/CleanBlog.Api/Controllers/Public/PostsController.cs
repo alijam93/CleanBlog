@@ -117,18 +117,5 @@ namespace CleanBlog.Api.Controllers.Public
             await _postService.DeletePost(id);
             return NoContent();
         }
-    
-        /// <summary>
-        /// Upload from data image for a post.
-        /// </summary>
-        /// <param name="image"></param>
-        /// <returns></returns>
-        [HttpPost("AddImage")]
-        public ActionResult<string> AddImage([FromForm] UploadModel image)
-        {
-            var result = _postService.SendImage(image);
-
-            return Ok(result);
-        }
     }
 }

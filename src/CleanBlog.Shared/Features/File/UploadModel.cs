@@ -10,6 +10,7 @@ namespace CleanBlog.Shared.Features.File
 {
     public class UploadModel
     {
+        [Required]
         public string Name { get; set; }
 
         [DataType(DataType.Upload)]
