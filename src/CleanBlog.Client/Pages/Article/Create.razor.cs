@@ -20,7 +20,8 @@ namespace CleanBlog.Client.Pages.Article
     {
         protected string tagId;
         protected bool isTagValid = true;
-        public IEnumerable<string> _selectedValues;
+        IEnumerable<string> _selectedValues;
+
 
         public string ImgUrl { get; set; }
         private EditContext editContext;
@@ -30,9 +31,8 @@ namespace CleanBlog.Client.Pages.Article
         public AddPostVM Post = new();
         protected List<TagDTO> Tags = new();
 
-        string button = "btn1";
+        string button = "btn btn-primary";
         bool disable = false;
-        string cursor = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -73,7 +73,7 @@ namespace CleanBlog.Client.Pages.Article
 
         private void OnSelectedItemsChangedHandler(IEnumerable<string> values)
         {
-            Post.AddTags = string.Join(",", _selectedValues);
+            Post.AddTags = string.Join(",", values);
             if (string.IsNullOrEmpty(Post.AddTags))
             {
                 isTagValid = false;
@@ -116,9 +116,8 @@ namespace CleanBlog.Client.Pages.Article
 
         void Disable()
         {
-            button = "btn btn-secondary btn-lg disabled";
+            button = "btn btn-secondary disabled";
             disable = true;
-            cursor = "not-allowed";
         }
     }
 }

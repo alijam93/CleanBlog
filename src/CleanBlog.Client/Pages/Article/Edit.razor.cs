@@ -1,6 +1,7 @@
 ﻿using CleanBlog.Client.Utils.Models;
 using CleanBlog.Client.Utils.Statics;
 using CleanBlog.Shared.Dtos;
+using CleanBlog.Shared.Extensions;
 using CleanBlog.Shared.Features.File;
 
 using Microsoft.AspNetCore.Components;
@@ -22,16 +23,16 @@ namespace CleanBlog.Client.Pages.Article
         [Parameter] public int Id { get; set; }
         [Parameter] public string Slug { get; set; }
 
-        public PostDTO PostTags = new();
-        EditPostVM Post = new();
-        public List<TagDTO> Tags = new();
+        protected PostDTO PostTags = new();
+        protected EditPostVM Post = new();
+        protected List<TagDTO> Tags = new();
 
 
         public IEnumerable<int> delTagId;
         public IEnumerable<int> addTagId;
 
         public string ImgUrl { get; set; }
-        private EditContext editContext;
+        protected EditContext editContext;
         public MultipartFormDataContent content = new();
         bool disableUpload = true;
 
@@ -39,9 +40,8 @@ namespace CleanBlog.Client.Pages.Article
         string invisibleSrc;
         string visibleUpload;
 
-        string button = "btn1 font-weight-light";
+        string button = "btn btn-primary font-weight-light";
         bool disable = false;
-        //string cursor;
 
         protected override async Task OnInitializedAsync()
         {
@@ -86,7 +86,7 @@ namespace CleanBlog.Client.Pages.Article
             if (result.IsSuccessStatusCode)
             {
                 Disable();
-                //navigation.NavigateTo($"article/{Id}/{FriendlyUrlExtension.GetSlugTitle(Post.Title)}");
+                navigation.NavigateTo($"article/{Id}/{StringExtension.FriendlyUrl(Post.Title)}");
             }
             else
             {
@@ -130,9 +130,8 @@ namespace CleanBlog.Client.Pages.Article
 
         void Disable()
         {
-            button = "btn1-disable text-dark shadow-none";
+            button = "btn btn-secondary text-dark shadow-none";
             disable = true;
-            //cursor = "not-allowed";
         }
     }
 }

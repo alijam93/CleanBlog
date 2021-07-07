@@ -1,30 +1,27 @@
 ﻿@page "/article/edit/{Id:int}/{Slug}"
 @inject HttpClient http
-@inject NavigationManager navigation 
+@inject NavigationManager navigation
+@*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
 
-<span class="text-dark rounded mr-3 h2 font-weight-bold">
-    ویرایش مقاله
-    @*<Icon Type="edit" Theme="outline" />*@
+<span class="text-dark rounded ml-3 h2 font-weight-bold">
+    Edit Article
+    <i class="bi bi-pencil-fill"></i>
 </span>
-<div class="m-3 mt-4 shadow-sm rounded bg-light p-2 color1">
+<div class="m-3 mt-4 shadow-sm rounded bg-light p-2">
     <br />
     <EditForm EditContext="editContext" OnValidSubmit="UpdateArticle">
         <DataAnnotationsValidator />
 
-        <div class="form-group row rtl">
-            <div class="col col-md-7">
-                <InputText type="text" class="form-control w-75 rounded" @bind-Value="@Post.Title" placeholder="عنوان مقاله" />
-            </div>
-            <div class="col col-m-5">
-                <ValidationMessage For="@(() => Post.Title)" />
-            </div>
+        <div class="col-md-6">
+            <InputText type="text" class="form-control rounded" @bind-Value="@Post.Title" placeholder="Article title" />
+            <ValidationMessage For="@(() => Post.Title)" />
         </div>
         <br />
 
         @if (!string.IsNullOrEmpty(Post.Image))
         {
             <div class="@invisibleSrc">
-                <button class="btn-danger rounded-circle" style="transform: translate(110px, -40px);"
+                <button class="badge bg-danger rounded-circle p-1" style="transform: translate(110px, -40px);"
                         @onclick="() => DeleteImage(Post.Image)">
                     <span class="text-center">X</span>
                 </button>
@@ -35,88 +32,73 @@
         else
         {
             <div class="form-group @visibleUpload">
-                <div class="form-row rtl">
-                    <div class="col-3">
-                        @if (disableUpload)
-                        {
-                            <label for="input" class="btn btn-secondary rounded-pill">
-                                @*<Icon Type="upload" Theme="outline" /> آپلود عکس*@
-                            </label>
-                        }
-                        <InputFile id="input" OnChange="@OnChangeImage" @bind-Value="@Post.Picture" class="form-control" hidden accept=".png, .jpg" />
-                    </div>
-                    <div class="col-9">
-                        <ValidationMessage For="@(() => Post.Picture)" />
-                    </div>
-                </div>
+                @if (disableUpload)
+                {
+                    <label for="input" class="btn btn-secondary rounded-pill">
+                        Upload Image <i class="bi bi-cloud-upload"></i>
+                    </label>
+                }
+                <InputFile id="input" OnChange="@OnChangeImage" @bind-Value="@Post.Picture" class="form-control" hidden accept=".png, .jpg" />
+                <ValidationMessage For="@(() => Post.Picture)" />
 
                 @if (ImgUrl != null)
                 {
-                    <div class="d-flex flex-row shadow float-right border border-secondary bg-light rounded w-50">
+                    <div class="d-flex flex-row shadow border border-secondary bg-light rounded mt-2">
                         <img class="m-2" src="@ImgUrl" style="width:60px; height: 40px;" />
-                        <p class="p-2 mt-2 text-success float-left overflow-hidden text-nowrap">@Post.FileName</p>
+                        <p class="p-2 mt-2 text-success overflow-hidden text-nowrap">@Post.FileName</p>
                     </div>
-                    <br />
-                    <br />
-                    <br />
                 }
             </div>
         }
 
         @{
-            //RenderFragment noContent =@<Icon Class="text-danger" Type="exclamation-circle" Theme="outline" />;
+            RenderFragment noContent =@<Icon Class="text-danger" Type="exclamation-circle" Theme="outline" />;
         }
-        @*<div class="form-group row m-4">
-            <div class="col">
-                <Select Mode="multiple"
-                        Style="width: 50%"
-                        Placeholder="حذف تگ"
-                        @bind-Values="@delTagId"
-                        HideSelected="true"
-                        TItemValue="int"
-                        TItem="string"
-                        NotFoundContent=@noContent
-                        Disabled=@disable>
-                    <SelectOptions>
-                        @foreach (var tag in PostTags.Tags)
-                        {
-                            <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
-                        }
-                    </SelectOptions>
-                </Select>
+        <div class="mt-4">
+            <div class="row">
+                <div class="col-6">
+                    <Select Mode="multiple"
+                            Style="width: 80%"
+                            Placeholder="delete tag"
+                            @bind-Values="@delTagId"
+                            HideSelected="true"
+                            TItemValue="int"
+                            TItem="string"
+                            NotFoundContent=@noContent
+                            Disabled=@disable>
+                        <SelectOptions>
+                            @foreach (var tag in PostTags.Tags)
+                            {
+                                <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
+                            }
+                        </SelectOptions>
+                    </Select>
+                </div>
+                <div class="col-6">
+                    <Select Mode="multiple"
+                            Placeholder="Add tag"
+                            Style="width: 80%"
+                            @bind-Values="@addTagId"
+                            NotFoundContent=@noContent
+                            TItemValue="int"
+                            TItem="string"
+                            Disabled=@disable>
+                        <SelectOptions>
+                            @foreach (var tag in Tags)
+                            {
+                                <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
+                            }
+                        </SelectOptions>
+                    </Select>
+                </div>
             </div>
-            <div class="col">
-                <Select Mode="multiple"
-                        Placeholder="اضافه کردن تگ"
-                        Style="width: 50%"
-                        @bind-Values="@addTagId"
-                        NotFoundContent=@noContent
-                        TItemValue="int"
-                        TItem="string"
-                        Disabled=@disable>
-                    <SelectOptions>
-                        @foreach (var tag in Tags)
-                        {
-                            <SelectOption TItemValue="int" TItem="string" Value=@tag.Id Label=@tag.Name />
-                        }
-                    </SelectOptions>
-                </Select>
-            </div>
-        </div>*@
+        </div>
 
-        @*<div class="form-group">
-            <SfRichTextEditor @bind-Value="@Post.Content" Placeholder="متن را وارد کنید">
-            </SfRichTextEditor>
+        <div class="mt-5">
+            <InputTextArea @bind-Value="@Post.Content" class="form-control" Placeholder="Enter article text" />
             <ValidationMessage For="@(() => Post.Content)" />
-        </div>*@
-        <button type="submit" class="@button" disabled="@disable">Save</button>
+        </div>
+
+        <button type="submit" class="@button mt-5" disabled="@disable">Save</button>
     </EditForm>
 </div>
-
-<style>
-    .e-richtexteditor .rte-placeholder {
-        font-family: monospace;
-        text-align: right;
-    }
-</style>
-

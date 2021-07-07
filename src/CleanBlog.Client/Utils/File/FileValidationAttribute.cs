@@ -27,7 +27,7 @@ namespace CleanBlog.Client.Utils.File
                 var extension = Path.GetExtension(file.Name);
                 if (!AllowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
                 {
-                    return new ValidationResult($"This file must contains this formats:{string.Join(", ", AllowedExtensions)} :فایل ها باید شامل یکی از پسوند های زیر باشد",
+                    return new ValidationResult($"This file must contains this formats:{string.Join(", ", AllowedExtensions)}",
                         new[] { validationContext.MemberName });
                 }
             }

@@ -36,6 +36,7 @@ namespace CleanBlog.Client
 
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddHttpClientInterceptor();
+            builder.Services.AddAntDesign();
             builder.Services.AddMudServices();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();

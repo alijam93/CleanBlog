@@ -1,61 +1,49 @@
 ﻿@page "/article/add"
 @inject HttpClient http
-@inject NavigationManager navigation 
-@attribute [Authorize(Policy = Policies.IsAdmin)]
+@inject NavigationManager navigation
+@*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
 
-<span class="text-dark rounded mr-3 h2 font-weight-bold">
+<span class="text-dark rounded ml-3 h2 font-weight-bold">
     Write a new article
-    @*<Icon Type="form" Theme="outline" />*@
+    <i class="bi bi-file-earmark-post-fill"></i>
 </span>
 
 <div class="m-3 mt-4 shadow-sm rounded bg-light p-2 color1">
     <br />
     <EditForm EditContext="editContext" OnValidSubmit="AddArticle" OnInvalidSubmit="TagSubmit">
         <DataAnnotationsValidator />
-        <div class="form-group row rtl">
-            <div class="col col-md-7">
-                <InputText type="text" class="form-control w-75 rounded" @bind-Value="Post.Title" placeholder="Article Title" />
-            </div>
-            <div class="col col-m-5">
-                <ValidationMessage For="@(() => Post.Title)" />
-            </div>
+        <div class="col-md-6">
+            <InputText type="text" class="form-control rounded" @bind-Value="Post.Title" placeholder="Article Title" />
+            <ValidationMessage For="@(() => Post.Title)" />
         </div>
+        <br />
 
         <div class="form-group">
-            <div class="form-row rtl">
-                <div class="col-3">
-                    @if (disableUpload)
-                    {
-                        <label for="input" class="btn btn-secondary rounded-pill">
-                            @*<Icon Type="upload" Theme="outline" />*@ Upload Image
-                        </label>
-                    }
-                    <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
-                </div>
-                <div class="col-9">
-                    <ValidationMessage For="() => Post.Picture" />
-                </div>
-            </div>
+            @if (disableUpload)
+            {
+                <label for="input" class="btn btn-secondary rounded-pill">
+                    Upload Image <i class="bi bi-cloud-upload"></i>
+                </label>
+            }
+            <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
+            <ValidationMessage For="() => Post.Picture" />
 
             @if (ImgUrl != null)
             {
-                <div class="d-flex flex-row shadow float-right border border-secondary bg-light rounded w-50">
+                <div class="d-flex flex-row col-md-6 shadow float-right border border-secondary bg-light rounded w-50 mt-2">
                     <img class="m-2" src="@ImgUrl" style="width:60px; height: 40px;" />
-                    <p class="p-2 mt-2 text-success float-left overflow-hidden text-nowrap">@Post.FileName</p>
+                    <p class="p-2 mt-2 text-success overflow-hidden text-nowrap">@Post.FileName</p>
                 </div>
-                <br />
-                <br />
-                <br />
             }
         </div>
 
-        <div class="form-group mr-1 row rtl"> 
-            @*<Select Mode="multiple"
+        <div class="mt-4">
+            <Select Mode="multiple"
                     Style="width: 30%"
                     @bind-Values="@_selectedValues"
                     TItemValue="string"
                     TItem="string"
-                    Placeholder="تگ را وارد کنید"
+                    Placeholder="Enter tag"
                     OnSelectedItemsChanged="OnSelectedItemsChangedHandler">
                 <SelectOptions>
                     @foreach (var tag in Tags)
@@ -67,31 +55,19 @@
             @if (isTagValid == false)
             {
                 <div class="mr-2">
-                    <div class="validation-message">تگ خالی میباشد</div>
+                    <div class="validation-message">tag is empty</div>
                 </div>
-            }*@
+            }
 
         </div>
         <br /><br />
 
-        <div class="form-group">
-            @*<SfRichTextEditor @bind-Value="Post.Content" Placeholder="متن را وارد کنید">
-            </SfRichTextEditor>
-            <ValidationMessage For="@(() => Post.Content)" />*@
+        <div class="mt-5">
+            <InputTextArea @bind-Value="@Post.Content" class="form-control" Placeholder="Enter article text" />
+            <ValidationMessage For="@(() => Post.Content)" />
         </div>
 
-        <button type="submit" class="@button" disabled="@disable" style="cursor: @cursor">ذخیره</button>
+        <button type="submit" class="@button mt-5" disabled="@disable">Save</button>
     </EditForm>
 </div>
 
-<style>
-    .e-richtexteditor .rte-placeholder {
-        font-family: monospace;
-        text-align: right;
-    }
-
-    .demo-option-label-item > span {
-        margin-right: 6px;
-    }
-</style>
- 
