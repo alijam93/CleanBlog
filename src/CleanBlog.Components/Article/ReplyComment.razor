@@ -12,17 +12,17 @@
                 <EditForm Model="@Comment" OnValidSubmit="SendReply">
                     <DataAnnotationsValidator />
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label><br />
-                        <InputText type="text" class="form-control text-right w-50 float-right rounded-pill" @bind-Value="Comment.UserName" placeholder="Name" />
+                        <label for="exampleInputEmail1">Name</label>
+                        <InputText type="text" class="form-control w-50 rounded-pill" @bind-Value="Comment.UserName" placeholder="Name" />
                         <ValidationMessage For="@(() => Comment.UserName)" />
-                    </div> <br /><br />
-                    <div class="form-group">
+                    </div> 
+                    <div class="form-group mt-3">
                         <label for="exampleFormControlTextarea1">Comment Content</label>
-                        <InputTextArea class="form-control text-right" @bind-Value="Comment.Content" rows="3"></InputTextArea>
+                        <InputTextArea class="form-control" @bind-Value="Comment.Content" rows="3"></InputTextArea>
                         <ValidationMessage For="@(() => Comment.Content)" />
                     </div>
-                    <div class="mt-5">
-                        <button type="submit" class="btn btn-success float-left">Save</button>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">Save</button>
                         <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
                     </div>
                 </EditForm>

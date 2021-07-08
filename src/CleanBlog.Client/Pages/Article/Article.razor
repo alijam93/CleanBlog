@@ -40,20 +40,20 @@ else
                        href=@($"/article/edit/{Post.Id}/{Slug}")>
                         <i class="bi bi-pencil-fill"></i>
                     </a>
-                    <a type="button" class="btn btn-danger btn-sm text-white shadow ml-2"
+                    <a type="button" class="btn btn-danger btn-sm text-white shadow ms-2"
                        @onclick="(() => Delete.Open(Post.Id))">
                         <i class="bi bi-x-lg"></i>
                     </a>
 
                 </div>
                 <div>
-                    <span class="mr-2 badge bg-light text-dark shadow-sm">
+                    <span class="badge bg-light text-dark shadow-sm me-2">
                         @*<Icon Type="wechat" Theme="outline" />*@
                         <i class="bi bi-chat-right-fill"></i>
                         @*@Comments.Length*@
                         @Comments.Count()
                     </span>
-                    <span class="mr-2 badge bg-light text-dark shadow-sm ">Date: @Post.Created </span>
+                    <span class="badge bg-light text-dark shadow-sm me-2">Date: @Post.Created </span>
                 </div>
             </div>
             <div class="card-text p-4">
@@ -61,12 +61,12 @@ else
             </div>
             <div class="mt-4">
                 @foreach (var tag in Post.Tags)
-                { 
-                    <AntDesign.Tag Color="blue">
-                        <a href="@($"tag/{tag.Name}")">
+                {
+                    <a href="@($"tag/{tag.Name}")">
+                        <AntDesign.Tag Color="blue">
                             @tag.Name
-                        </a>
-                    </AntDesign.Tag>
+                        </AntDesign.Tag>
+                    </a>
                 }
             </div>
         </div>
@@ -74,7 +74,7 @@ else
 
     <div class="d-flex flex-column text-white">
         <AddComment PostId="@Post.Id"></AddComment>
-        <div class="comments-container m-3 p-3 rounded-left bg-light">
+        <div class="comments-container m-3 p-3 rounded-start bg-light">
             <h1>Comments</h1>
             <ul id="comments-list" class="comments-list">
                 @foreach (var comment in Comments)
@@ -92,7 +92,7 @@ else
                                     <i class="bi bi-x-lg btn btn-danger p-1 text-light shadow" @onclick="() => DeleteCommment(comment.Id)" />
                                     <i class="bi bi-pencil-fill btn btn-info p-1 text-light shadow" @onclick="() => GetCommentById(comment.Id)" />
                                     <i class="bi bi-arrow-90deg-down p-1" @onclick="(() => ReplyComment.Open(comment.Id, comment.PostId))" />
-                                    <span class="float-left">@comment.Created</span>
+                                    <span class="float-start">@comment.Created</span>
                                 </div>
                                 <div class="comment-content">
                                     @comment.Content
@@ -115,7 +115,7 @@ else
                                                 </AuthorizeView>*@
                                             <i class="bi bi-x-lg btn btn-danger p-1 text-light shadow" @onclick="() => DeleteCommment(rep.Id)" />
                                             <i class="bi bi-pencil-fill btn btn-info p-1 text-light shadow" @onclick="() => GetCommentById(rep.Id)" />
-                                            <span class="float-left">@comment.Created</span>
+                                            <span class="float-start">@comment.Created</span>
                                         </div>
 
                                         <div class=" comment-content">
@@ -139,15 +139,17 @@ else
         <EditForm Model="@Comment" OnValidSubmit="@EditComment">
             <DataAnnotationsValidator />
             <div class="form-group">
-                <label for="exampleInputEmail1">Name</label><br />
-                <InputText type="text" class="form-control text-right w-50 float-right rounded-pill" @bind-Value="Comment.UserName" placeholder="نام" />
-            </div> <br /><br />
-            <div class="form-group">
+                <label for="exampleInputEmail1">Name</label>
+                <InputText type="text" class="form-control w-50 rounded-pill" @bind-Value="Comment.UserName"/>
+            </div> 
+            <div class="form-group mt-3">
                 <label for="exampleFormControlTextarea1">Content</label>
-                <InputTextArea class="form-control text-right" @bind-Value="Comment.Content" rows="3"></InputTextArea>
+                <InputTextArea class="form-control" @bind-Value="Comment.Content" rows="3"></InputTextArea>
             </div>
-            <button type="submit" class="btn btn-success float-left" data-dismiss="@closeModal">Save</button>
+            <div class="mt-4">
+            <button type="submit" class="btn btn-success" data-dismiss="@closeModal">Save</button>
             <button type="button" class="btn btn-secondary">Close</button>
+            </div>
         </EditForm>
     </CommentBody>
 </UpateComment>

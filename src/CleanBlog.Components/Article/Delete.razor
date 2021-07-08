@@ -9,10 +9,10 @@
                 <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
             <div class="modal-body bg-light text-primary">
-                <p class="text-center text-warning h3">
+                <p class="text-center text-warning mb-4 h3">
                     Are you sure you want to delete this article?
-                </p><br /><br />
-                <button type="submit" class="btn btn-danger float-left" @onclick="() => DeleteArticle()">Delete</button>
+                </p>
+                <button type="submit" class="btn btn-danger" @onclick="() => DeleteArticle()">Delete</button>
                 <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
             </div>
         </div>

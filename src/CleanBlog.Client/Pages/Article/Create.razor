@@ -3,7 +3,7 @@
 @inject NavigationManager navigation
 @*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
 
-<span class="text-dark rounded ml-3 h2 font-weight-bold">
+<span class="text-dark rounded ms-3 h2 font-weight-bold">
     Write a new article
     <i class="bi bi-file-earmark-post-fill"></i>
 </span>
@@ -30,7 +30,7 @@
 
             @if (ImgUrl != null)
             {
-                <div class="d-flex flex-row col-md-6 shadow float-right border border-secondary bg-light rounded mt-2">
+                <div class="d-flex flex-row col-md-6 shadow border border-secondary bg-light rounded mt-2">
                     <img class="m-2" src="@ImgUrl" style="width:60px; height: 40px;" />
                     <p class="p-2 mt-2 text-success overflow-hidden text-nowrap">@Post.FileName</p>
                 </div>
@@ -54,20 +54,19 @@
             </Select>
             @if (isTagValid == false)
             {
-                <div class="mr-2">
+                <div class="me-2">
                     <div class="validation-message">tag is empty</div>
                 </div>
             }
 
         </div>
-        <br /><br />
 
         <div class="mt-5">
             <InputTextArea @bind-Value="@Post.Content" class="form-control" Placeholder="Enter article text" />
             <ValidationMessage For="@(() => Post.Content)" />
         </div>
 
-        <button type="submit" class="@button mt-5" disabled="@disable">Save</button>
+        <button type="submit" class="@button mt-4" disabled="@disable">Save</button>
     </EditForm>
 </div>
 

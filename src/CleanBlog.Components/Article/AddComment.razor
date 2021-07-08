@@ -1,7 +1,7 @@
 ﻿@inject HttpClient http
 @using CleanBlog.Shared.Dtos
 
-<div class="m-3 p-3 rounded-left bg-light shadow-sm">
+<div class="m-3 p-3 rounded-start bg-light shadow-sm">
     <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Add comment
     </a>
@@ -9,17 +9,16 @@
         <EditForm Model="@Comment" OnValidSubmit="SendComment">
             <DataAnnotationsValidator />
             <div class="form-group col-md-8">
-                <label for="exampleInputEmail1">Name</label><br />
+                <label for="exampleInputEmail1">Name</label>
                 <InputText type="text" class="form-control" disabled="@disable" @bind-Value="Comment.UserName" placeholder="enter name" />
                 <ValidationMessage For="@(() => Comment.UserName)" />
-            </div> <br /><br />
-            <div class="form-group col-md-10">
+            </div> 
+            <div class="form-group col-md-10 mt-2">
                 <label for="exampleFormControlTextarea1">Write comment</label>
-                <InputTextArea class="form-control text-right" disabled="@disable" @bind-Value="Comment.Content" rows="3"></InputTextArea>
+                <InputTextArea class="form-control text-end" disabled="@disable" @bind-Value="Comment.Content" rows="3"></InputTextArea>
                 <ValidationMessage For="@(() => Comment.Content)" />
-
             </div>
-            <button type="submit" class="@button mt-5" disabled="@disable" style="cursor: @cursor">Save</button>
+            <button type="submit" class="@button mt-4" disabled="@disable" style="cursor: @cursor">Save</button>
         </EditForm>
     </div>
 </div>

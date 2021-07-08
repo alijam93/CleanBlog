@@ -3,7 +3,7 @@
 @inject NavigationManager navigation
 @*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
 
-<span class="text-dark rounded ml-3 h2 font-weight-bold">
+<span class="text-dark rounded ms-3 h2 font-weight-bold">
     Edit Article
     <i class="bi bi-pencil-fill"></i>
 </span>
@@ -99,6 +99,6 @@
             <ValidationMessage For="@(() => Post.Content)" />
         </div>
 
-        <button type="submit" class="@button mt-5" disabled="@disable">Save</button>
+        <button type="submit" class="@button mt-4" disabled="@disable">Save</button>
     </EditForm>
 </div>

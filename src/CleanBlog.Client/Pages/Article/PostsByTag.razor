@@ -11,7 +11,7 @@
 }
 else
 {
-    <div class="d-flex flex-nowrap ml-5 pt-3">
+    <div class="d-flex flex-nowrap ms-4 pt-3">
         <div>
             <p class="badge bg-light text-dark shadow-sm text-center">
                 <strong class="h6">
@@ -20,7 +20,7 @@ else
                 </strong>
             </p>
         </div>
-        <p class="badge bg-info shadow-sm text-center ml-2"><strong class="h6">@Name</strong></p>
+        <p class="badge bg-info shadow-sm text-center ms-2"><strong class="h6">@Name</strong></p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2">
@@ -37,24 +37,20 @@ else
                         <div class="article-img"></div>
                     }
                     <div class="article-body">
-                        <h5 class="article-title text-wrap">
-                            <a href="@($"article/{post.Id}/{post.Slug}")">
+                        <div class="article-title">
+                            <a href="@($"article/{post.Id}/{post.Slug}")" class="h5">
                                 @post.Title
                             </a>
-                        </h5>
-                        <div class="card-text d-flex bd-highlight m-3">
-                            <div class="mr-auto p-2 bd-highlight">
-                            </div>
-                            <div class="p-2 bd-highlight">
-                                @foreach (var tag in post.Tags)
-                                {
+                        </div>
+                        <div class="p-2">
+                            @foreach (var tag in post.Tags)
+                            {
+                                <a href="@($"tag/{tag.Name}")">
                                     <AntDesign.Tag Color="purple">
-                                        <a href="@($"tag/{tag.Name}")">
-                                            @tag.Name
-                                        </a>
+                                        @tag.Name
                                     </AntDesign.Tag>
-                                }
-                            </div>
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>
