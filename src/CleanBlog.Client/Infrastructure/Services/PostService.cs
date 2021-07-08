@@ -1,4 +1,5 @@
 ﻿using CleanBlog.Client.Infrastructure.Services.Interfaces;
+using CleanBlog.Client.Utils.Statics;
 using CleanBlog.Components.Pagination;
 using CleanBlog.Shared.Dtos;
 using CleanBlog.Shared.Features.Pagination;
@@ -32,7 +33,7 @@ namespace CleanBlog.Client.Infrastructure.Services
                 ["pageNumber"] = postParameters.PageNumber.ToString()
             };
 
-            _url = $"api/posts/{name}";
+            _url = Endpoints.Posts + name;
 
             var response = await _http.GetAsync(QueryHelpers.AddQueryString(_url, queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
@@ -59,11 +60,11 @@ namespace CleanBlog.Client.Infrastructure.Services
             //if (tagId > 0)
             if (name != null)
             {
-                _url = $"api/posts/{name}";
+                _url =Endpoints.Posts + name;
             }
             else
             {
-                _url = "api/posts";
+                _url = Endpoints.Posts + name;
             }
 
             var response = await _http.GetAsync(QueryHelpers.AddQueryString(_url, queryStringParam));
@@ -84,7 +85,7 @@ namespace CleanBlog.Client.Infrastructure.Services
 
         public async Task<PostDTO> GetPostsByById(int id, string slug)
         {
-            return await _http.GetFromJsonAsync<PostDTO>($"api/posts/{id}/{slug}");
+            return await _http.GetFromJsonAsync<PostDTO>($"{Endpoints.Posts}{id}/{slug}");
         }
     }
 }

@@ -38,12 +38,11 @@ namespace CleanBlog.Client.Pages.Article
         {
             _postParameters.PageNumber = page;
             await GetPostByTag(tagName);
-            Console.WriteLine($"page is => {page}, page count => {pageCount}");
         }
 
         public async Task GetPostByTag(string name)
         {
-            var pagingPost = await PostService.GetPosts(_postParameters, name );
+            var pagingPost = await PostService.GetPosts(_postParameters, name);
             Posts = pagingPost.Items;
             Paging = pagingPost.Paging;
         }

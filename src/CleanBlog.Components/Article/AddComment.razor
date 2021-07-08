@@ -8,13 +8,13 @@
     <div class="collapse mt-4 text-primary" id="collapseExample">
         <EditForm Model="@Comment" OnValidSubmit="SendComment">
             <DataAnnotationsValidator />
-            <div class="form-group">
+            <div class="form-group col-md-8">
                 <label for="exampleInputEmail1">Name</label><br />
-                <InputText type="text" class="form-control text-right rounded-pill w-50 float-right" disabled="@disable" @bind-Value="Comment.UserName" placeholder="Name" />
+                <InputText type="text" class="form-control" disabled="@disable" @bind-Value="Comment.UserName" placeholder="enter name" />
                 <ValidationMessage For="@(() => Comment.UserName)" />
             </div> <br /><br />
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Content</label>
+            <div class="form-group col-md-10">
+                <label for="exampleFormControlTextarea1">Write comment</label>
                 <InputTextArea class="form-control text-right" disabled="@disable" @bind-Value="Comment.Content" rows="3"></InputTextArea>
                 <ValidationMessage For="@(() => Comment.Content)" />
 

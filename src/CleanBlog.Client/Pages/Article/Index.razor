@@ -11,7 +11,7 @@
 }
 else
 {
-    <div class="d-flex flex-nowrap ml-5 pt-3">
+    <div class="d-flex flex-nowrap ms-5 pt-3">
         <div>
             <p class="badge bg-light text-dark shadow-sm text-center">
                 <strong class="h6">
@@ -21,17 +21,15 @@ else
             </p>
         </div>
         <div>
-            <MudContainer>
-                <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Class="mr-2"
-                           OnClick="() => GetPostByTag(null)">All</MudButton>
-                @foreach (var tag in Tags)
-                {
-                    <MudButton Variant="Variant.Filled" Size="Size.Small"
-                               OnClick="() => GetPostByTag(tag.Name)" Class="mr-2">
-                        @tag.Name
-                    </MudButton>
-                }
-            </MudContainer>
+            <button type="button" class="btn btn-dark btn-sm mr-2 ml-2" 
+                    @onclick="() => GetPostByTag(null)">All</button>
+            @foreach (var tag in Tags)
+            {
+                <button type="button" class="btn btn-outline-secondary btn-sm mr-2"
+                        @onclick="() => GetPostByTag(tag.Name)">
+                    @tag.Name
+                </button>
+            }
         </div>
     </div>
 
@@ -49,23 +47,24 @@ else
                         <div class="article-img"></div>
                     }
                     <div class="article-body">
-                        <h5 class="article-title text-wrap">
-                            <a href="@($"article/{post.Id}/{post.Slug}")">
-                                @post.Title
-                            </a>
-                        </h5>
-                        <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="article-title">
+                            <h5>
+                                <a href="@($"article/{post.Id}/{post.Slug}")">
+                                    @post.Title
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="card-text d-flex bd-highlight m-3">
                             <div class="mr-auto p-2 bd-highlight">
                             </div>
                             <div class="p-2 bd-highlight">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <MudButton Variant="Variant.Outlined"
-                                               Color="Color.Primary"
-                                               Size="Size.Small"
-                                               Link="@($"tag/{tag.Name}")">
-                                        @tag.Name
-                                    </MudButton>
+                                    <AntDesign.Tag Color="purple">
+                                        <a href="@($"tag/{tag.Name}")">
+                                            @tag.Name
+                                        </a>
+                                    </AntDesign.Tag>
                                 }
                             </div>
                         </div>

@@ -20,7 +20,7 @@ else
                 </strong>
             </p>
         </div>
-        <p class="badge bg-info text-dark shadow-sm text-center ml-2"><strong class="h6">@Name</strong></p>
+        <p class="badge bg-info shadow-sm text-center ml-2"><strong class="h6">@Name</strong></p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2">
@@ -42,18 +42,17 @@ else
                                 @post.Title
                             </a>
                         </h5>
-                        <div class="card-text d-flex bd-highlight pt-4 mb-3">
+                        <div class="card-text d-flex bd-highlight m-3">
                             <div class="mr-auto p-2 bd-highlight">
                             </div>
                             <div class="p-2 bd-highlight">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <MudButton Variant="Variant.Outlined"
-                                               Color="Color.Primary"
-                                               Size="Size.Small"
-                                               Link="@($"tag/{tag.Name}")">
-                                        @tag.Name
-                                    </MudButton>
+                                    <AntDesign.Tag Color="purple">
+                                        <a href="@($"tag/{tag.Name}")">
+                                            @tag.Name
+                                        </a>
+                                    </AntDesign.Tag>
                                 }
                             </div>
                         </div>
@@ -77,7 +76,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Posts = await http.GetFromJsonAsync<List<PostDTO>>($"api/posts/{Name}");
+        Posts = await http.GetFromJsonAsync<List<PostDTO>>(Endpoints.Posts + Name);
 
         await GetPostByTag(Name);
     }
