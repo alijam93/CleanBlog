@@ -1,49 +1,49 @@
 ﻿@page "/panel/tags"
 @layout AdminLayout
 @inject HttpClient http
-@*@inject ModalService ModalService*@
-@attribute [Authorize(Policy = Policies.IsAdmin)]
+@inject ModalService ModalService
+@*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
 
-@*<p class="h3 float-left text-muted">Tags List</p>
-    <Button Type="primary" Style="float: right; margin-right: 113px;"
-            OnClick="()=> AddModal()">
-        <Icon Type="plus-square" Theme="outline" Style="margin: 0 10px 20px 0" />
-        Add Tag
-    </Button>
+<p class="h3 text-muted">Tags List</p>
+<button class="btn btn-primary btn-sm my-2" @onclick="AddModal">
+    <i class="bi bi-plus-lg"></i>
+    Add Tag
+</button>
 
+<div class="router-pagging-table">
+    <Table DataSource="@Tags" Class="text-center thead-light shadow-sm rounded">
+        <RowTemplate>
+            <Column @bind-Field="@context.Id" Sortable />
+            <Column @bind-Field="@context.Name" Sortable />
+            <ActionColumn>
+                <Space>
+                    <SpaceItem>
+                        <button class="btn btn-outline-dark btn-sm"
+                                @onclick="()=> ShowModal(context.Id, context.Name)">
+                            <i class="bi bi-pencil"></i>
+                            Edit
+                        </button>
+                    </SpaceItem>
+                </Space>
+            </ActionColumn>
+        </RowTemplate>
+    </Table>
+    <br />
+</div>
 
-    <div class="router-pagging-table">
-        <Table DataSource="@Tags" Class="text-center thead-light shadow-sm rounded">
-            <RowTemplate>
-                <Column @bind-Field="@context.Id" Sortable />
-                <Column @bind-Field="@context.Name" Sortable />
-                <ActionColumn>
-                    <Space>
-                        <SpaceItem>
-                            <Button Type="primary" Icon="edit" Ghost OnClick="()=> ShowModal(context.Id, context.Name)">
-                                Edit
-                            </Button>
-                        </SpaceItem>
-                    </Space>
-                </ActionColumn>
-            </RowTemplate>
-        </Table>
-        <br />
-    </div>
+<Modal Title="@("Add Tag")"
+       Visible="@_visibleAdd"
+       OnOk="@AddTag"
+       OnCancel="@CancelModal">
+    <input @bind="@Tag.Name" />
+</Modal>
 
-    <Modal Title="@("Add Tag")"
-           Visible="@_visibleAdd"
-           OnOk="@AddTag"
-           OnCancel="@CancelModal">
-        <input @bind="@Tag.Name" />
-    </Modal>
-
-    <Modal Title="@("Tag Name")"
-           Visible="@_visible"
-           OnOk="@UpdateTag"
-           OnCancel="@CancelModal">
-        <input @bind="@Tag.Name" />
-    </Modal>*@
+<Modal Title="@("Tag Name")"
+       Visible="@_visible"
+       OnOk="@UpdateTag"
+       OnCancel="@CancelModal">
+    <input @bind="@Tag.Name" />
+</Modal>
 
 <style>
     .anticon {
@@ -56,7 +56,6 @@
 </style>
 
 @code {
-    //TagDTO[] Tags;
     List<TagDTO> Tags = new List<TagDTO>();
     TagDTO Tag = new TagDTO();
     bool _visible = false;
@@ -69,12 +68,12 @@
 
     async Task GetTags()
     {
-        Tags = await http.GetFromJsonAsync<List<TagDTO>>("api/admin/tags");
+        Tags = await http.GetFromJsonAsync<List<TagDTO>>(Endpoints.Tags);
     }
 
     async Task AddTag()
     {
-        await http.PostAsJsonAsync($"api/admin/tags", Tag);
+        await http.PostAsJsonAsync(Endpoints.Tags, Tag);
         await GetTags();
         await Task.Delay(1000);
         _visibleAdd = false;
@@ -82,7 +81,7 @@
 
     async Task UpdateTag()
     {
-        await http.PutAsJsonAsync($"api/admin/tags/{Tag.Id}", Tag);
+        await http.PutAsJsonAsync(Endpoints.Tags + Tag.Id, Tag);
         await GetTags();
         await Task.Delay(1000);
         Tag.Name = "";

@@ -2,48 +2,49 @@
 @layout AdminLayout
 @inject HttpClient http
 @using CleanBlog.Shared.Identity.Account
-@attribute [Authorize(Policy = Policies.IsAdmin)]
-@*<div class="row row-cols-2 row-cols-md-2">
-        <div class="col col-lg-2 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <Icon Type="team" Class="p-1 h4" Theme="outline" />
-                        <Statistic Title="All of Users" ValueStyle="color: #17a2b8;" Value="@userNumbers" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col col-lg-3 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <Icon Type="user-add" Class="p-1 h4" Theme="outline" />
-                        <Statistic Title="Login Users in month" ValueStyle="color: #3f8600;" Value="112893" />
-                    </div>
+@*@attribute [Authorize(Policy = Policies.IsAdmin)]*@
+
+<div class="row row-cols-2 row-cols-md-2">
+    <div class="col col-lg-2 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row">
+                    <i class="bi bi-people"></i>
+                    <Statistic Title="All of Users" ValueStyle="color: #17a2b8;" Value="@userNumbers" />
                 </div>
             </div>
         </div>
     </div>
+    <div class="col col-lg-3 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row">
+                    <i class="bi bi-people"></i>
+                    <Statistic Title="Login Users in month" ValueStyle="color: #3f8600;" Value="112893" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    <div class="router-pagging-table">
-        <Table DataSource="@Users" Class="text-center thead-light shadow-sm rounded">
-            <RowTemplate>
-                <Column @bind-Field="@context.Id" Title="Number" Width="5%" Sortable>@index</Column>
-                <Column @bind-Field="@context.UserName" Title="User Name" Sortable />
-                <Column @bind-Field="@context.Email" Sortable />
-                <Column @bind-Field="@context.UserRoles" Title="User Roles" Sortable>
-                    @foreach (var role in context.UserRoles)
-                    {
-                        <Tag Color="blue">@role</Tag>
+<div class="router-pagging-table">
+    <Table DataSource="@Users" Class="text-center thead-light shadow-sm rounded">
+        <RowTemplate>
+            <Column @bind-Field="@context.Id" Title="Number" Width="5%" Sortable>@index</Column>
+            <Column @bind-Field="@context.UserName" Title="User Name" Sortable />
+            <Column @bind-Field="@context.Email" Sortable />
+            <Column @bind-Field="@context.UserRoles" Title="User Roles" Sortable>
+                @foreach (var role in context.UserRoles)
+                {
+                    <Tag Color="blue">@role</Tag>
 
-                    }
-                </Column>
-            </RowTemplate>
-        </Table>
-        <br />
-    </div>*@
+                }
+            </Column>
+        </RowTemplate>
+    </Table>
+    <br />
+</div>
 
 
 @code {
@@ -58,7 +59,7 @@
 
     async Task GetTags()
     {
-        Users = await http.GetFromJsonAsync<UserDTO[]>("api/admin/users");
+        Users = await http.GetFromJsonAsync<UserDTO[]>(Endpoints.Users);
         userNumbers = Users.Count();
         Console.WriteLine($"number of users={Users.Count()}, index={index}");
     }
