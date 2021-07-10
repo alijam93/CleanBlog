@@ -1,8 +1,10 @@
 ﻿using CleanBlog.Client.Utils.Models;
 using CleanBlog.Client.Utils.Statics;
 using CleanBlog.Shared.Dtos;
+using CleanBlog.Shared.Extensions;
 using CleanBlog.Shared.Features.File;
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 using System;
@@ -14,35 +16,58 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace CleanBlog.Client.Pages.Article
+namespace CleanBlog.Client.Pages.Admin.Articles
 {
-    public partial class Create
+    public partial class Edit
     {
-        protected string tagId;
-        protected bool isTagValid = true;
-        IEnumerable<string> _selectedValues;
+        [Parameter] public int Id { get; set; }
+        [Parameter] public string Slug { get; set; }
 
-
-        public string ImgUrl { get; set; }
-        private EditContext editContext;
-        public MultipartFormDataContent content = new();
-        protected bool disableUpload = true;
-
-        public AddPostVM Post = new();
+        protected PostDTO PostTags = new();
+        protected EditPostVM Post = new();
         protected List<TagDTO> Tags = new();
 
-        string button = "btn btn-primary";
+
+        public IEnumerable<int> delTagId;
+        public IEnumerable<int> addTagId;
+
+        public string ImgUrl { get; set; }
+        protected EditContext editContext;
+        public MultipartFormDataContent content = new();
+        bool disableUpload = true;
+
+        string deletePath;
+        string invisibleSrc;
+        string visibleUpload;
+
+        string button = "btn btn-primary font-weight-light";
         bool disable = false;
 
         protected override async Task OnInitializedAsync()
         {
             editContext = new EditContext(Post);
 
-            Tags = await http.GetFromJsonAsync<List<TagDTO>>(Endpoints.Tags);
+            Tags = await http.GetFromJsonAsync<List<TagDTO>>(Endpoints.Tags + Id);
+
+            PostTags = await http.GetFromJsonAsync<PostDTO>($"{Endpoints.Posts}{Id}/{Slug}");
+
+            Post = await http.GetFromJsonAsync<EditPostVM>($"{Endpoints.Posts}{Id}/{Slug}");
+
+            editContext = new EditContext(Post);
+
         }
 
-        async Task AddArticle()
+        async Task UpdateArticle()
         {
+            editContext.Validate();
+
+            Post.AddTags = addTagId;
+            Post.RemoveTags = delTagId;
+
+            if (deletePath != null)
+            {
+                await http.PostAsJsonAsync(Endpoints.Photo + "deleteFile", new DeleteFile { Path = deletePath });
+            }
 
             if (Post.Picture != null)
             {
@@ -56,13 +81,12 @@ namespace CleanBlog.Client.Pages.Article
             }
 
 
-            var result = await http.PostAsJsonAsync(Endpoints.Posts, Post);
+            var result = await http.PutAsJsonAsync(Endpoints.Posts + Id, Post);
             var postContent = await result.Content.ReadAsStringAsync();
-
             if (result.IsSuccessStatusCode)
             {
                 Disable();
-                navigation.NavigateTo($"panel/article");
+                navigation.NavigateTo($"article/{Id}/{StringExtension.FriendlyUrl(Post.Title)}");
             }
             else
             {
@@ -71,32 +95,12 @@ namespace CleanBlog.Client.Pages.Article
             }
         }
 
-        private void OnSelectedItemsChangedHandler(IEnumerable<string> values)
-        {
-            Post.AddTags = string.Join(",", values);
-            if (string.IsNullOrEmpty(Post.AddTags))
-            {
-                isTagValid = false;
-            }
-            else
-            {
-                isTagValid = true;
-            }
-        }
-
-        void TagSubmit()
-        {
-            if (string.IsNullOrEmpty(Post.AddTags))
-            {
-                isTagValid = false;
-            }
-        }
-
         async Task OnChangeImage(InputFileChangeEventArgs e)
         {
             Post.Picture = e.File;
             Post.FileName = e.File.Name;
             editContext.NotifyFieldChanged(FieldIdentifier.Create(() => Post.Picture));
+
             var format = "image/jpeg";
             var resizedFile = await e.File.RequestImageFileAsync(format, 300, 200);
             using var ms = resizedFile.OpenReadStream(resizedFile.Size);
@@ -114,9 +118,17 @@ namespace CleanBlog.Client.Pages.Article
             ImgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
         }
 
+        void DeleteImage(string path)
+        {
+            deletePath = path;
+            invisibleSrc = "display-none";
+            visibleUpload = "display-block";
+            Post.Image = "";
+        }
+
         void Disable()
         {
-            button = "btn btn-secondary disabled";
+            button = "btn btn-secondary text-dark shadow-none";
             disable = true;
         }
     }

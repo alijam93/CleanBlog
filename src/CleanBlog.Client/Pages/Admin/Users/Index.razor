@@ -37,8 +37,14 @@
             <Column @bind-Field="@context.UserRoles" Title="User Roles" Sortable>
                 @foreach (var role in context.UserRoles)
                 {
-                    <Tag Color="blue">@role</Tag>
-
+                    if (role.Contains("Admin"))
+                    {
+                        <Tag Color="red">@role</Tag>
+                    }
+                    else if (role.Contains("User"))
+                    {
+                        <Tag Color="blue">@role</Tag>
+                    }
                 }
             </Column>
         </RowTemplate>

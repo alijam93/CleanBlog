@@ -1,5 +1,5 @@
-﻿using CleanBlog.Client.Utils.Statics;
-using CleanBlog.Components.Article;
+﻿using CleanBlog.Client.Pages.Article.Sections;
+using CleanBlog.Client.Utils.Statics;
 using CleanBlog.Shared.Dtos;
 
 using Microsoft.AspNetCore.Components;
