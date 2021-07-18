@@ -21,10 +21,10 @@
         @if (!string.IsNullOrEmpty(Post.Image))
         {
             <div class="@invisibleSrc">
-                <button class="badge bg-danger rounded-circle p-1" style="transform: translate(110px, -40px);"
+                <label for="input" class="badge bg-danger rounded-circle p-1" style="transform: translate(110px, -40px);"
                         @onclick="() => DeleteImage(Post.Image)">
                     <span class="text-center">X</span>
-                </button>
+                </label>
                 <img src="@Post.Image" class="shadow mb-3" width="100" height="70" />
             </div>
 
@@ -34,9 +34,9 @@
             <div class="form-group @visibleUpload">
                 @if (disableUpload)
                 {
-                    <button class="btn btn-secondary rounded-pill">
+                    <label for="input" class="btn btn-secondary rounded-pill">
                         <i class="bi bi-cloud-upload pe-2 align-middle"></i>Upload Image
-                    </button>
+                    </label>
                 }
                 <InputFile id="input" OnChange="@OnChangeImage" @bind-Value="@Post.Picture" class="form-control" hidden accept=".png, .jpg" />
                 <ValidationMessage For="@(() => Post.Picture)" />

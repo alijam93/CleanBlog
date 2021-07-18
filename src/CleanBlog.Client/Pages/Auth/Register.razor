@@ -39,9 +39,9 @@
                     <div class="form-group mt-3">
                         @if (disableUpload)
                         {
-                            <button class="btn btn-secondary rounded-pill">
+                            <label for="input" class="btn btn-secondary rounded-pill">
                                 <i class="bi bi-cloud-upload pe-2 align-middle"></i>Image Profile
-                            </button>
+                            </label>
                         }
                         <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
                         <ValidationMessage For="() => RegisterModel.Picture" />
