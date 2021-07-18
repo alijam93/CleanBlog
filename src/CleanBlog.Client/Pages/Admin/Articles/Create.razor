@@ -9,7 +9,7 @@
     <i class="bi bi-file-earmark-post-fill"></i>
 </span>
 
-<div class="m-3 mt-4 shadow-sm rounded bg-light p-2 color1">
+<div class="m-3 mt-4 shadow-sm rounded bg-light p-2">
     <br />
     <EditForm EditContext="editContext" OnValidSubmit="AddArticle" OnInvalidSubmit="TagSubmit">
         <DataAnnotationsValidator />
@@ -22,9 +22,9 @@
         <div class="form-group">
             @if (disableUpload)
             {
-                <label for="input" class="btn btn-secondary rounded-pill">
-                    Upload Image <i class="bi bi-cloud-upload"></i>
-                </label>
+                <button class="btn btn-secondary rounded-pill">
+                    <i class="bi bi-cloud-upload pe-2 align-middle"></i>Upload Image
+                </button>
             }
             <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
             <ValidationMessage For="() => Post.Picture" />

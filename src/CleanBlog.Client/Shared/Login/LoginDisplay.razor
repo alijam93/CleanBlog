@@ -5,47 +5,60 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @implements IDisposable
 
-
 <AuthorizeView>
     <Authorized>
-        <ul class="navbar-nav ml-5 mr-md-auto dropdown-panel">
-            <li class="nav-item active dropdown">
-                <a class="nav-link nav-title" id="navbarDropdownMenuLink"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="text-primary">
-                        @context.User.Identity.Name
-                        <img class="rounded-circle" src="@context.User.FindFirst("avatar_path").Value" width="32" height="28">
-                    </span>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @*<img class="rounded-circle" src="https://us.123rf.com/450wm/mialima/mialima1603/mialima160300025/55096766-male-user-icon-isolated-on-a-white-background-account-avatar-for-web-user-profile-picture-unknown-ma.jpg?ver=6" width="32" height="28">
+                        Name*@
+                    @context.User.Identity.Name
+                    <img class="rounded-circle" src="@context.User.FindFirst("avatar_path").Value" width="32" height="28">
                 </a>
-                <ul class="dropdown-menu text-right dropdown-ul" aria-labelledby="navbarDropdownMenuLink">
+                <ul class="dropdown-menu dropdown-menu-lg-end me-3" aria-labelledby="navbarDropdown">
                     <li>
                         <a class="dropdown-item" href="/panel/admin">
-                            @*<Icon Type="audit" Theme="outline" />*@
-                            go to panel
+                            <Icon Type="audit" Theme="outline" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar" viewBox="0 0 16 16">
+                                <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H5zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2V2z" />
+                            </svg>
+                            <span class="p-1">go to panel</span>
                         </a>
                     </li>
+                    <li><hr class="dropdown-divider"></li>
                     <li>
-                        <a href="LogOut" class="dropdown-item" style="color: aquamarine;">
-                            @*<Icon Type="logout" Theme="outline" />*@
-                            Exit
+                        <a class="dropdown-item text-danger" href="LogOut">
+                            <Icon Type="logout" Theme="outline" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                            </svg>
+                            <span class="p-1">Exit</span>
                         </a>
                     </li>
                 </ul>
             </li>
         </ul>
     </Authorized>
+
     <NotAuthorized>
-        <ul class="navbar-nav mr-md-auto pl-4">
-            <li class="nav-item nav-item-hover active">
-                <a href="register" class="nav-link pl-2 nav-title">
-                    @*<Icon Type="user-add" Theme="outline" />*@
-                    Register
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link text-light" @onclick="(() => Login.Open())">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                    Login
                 </a>
             </li>
-            <li class="nav-item nav-item-hover active">
-                <a class="nav-link nav-title" @onclick="(() => Login.Open())">
-                    @*<Icon Type="login" Theme="outline" />*@
-                    Login
+            <li class="nav-item">
+                <a class="nav-link text-light" aria-current="page" href="register">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg>
+                    Register
                 </a>
             </li>
         </ul>
@@ -54,57 +67,24 @@
 
 <Login @ref="Login"></Login>
 
-<style>
-    .dropdown-panel li a.nav-item-hover:hover {
-        background-color: none;
-        border-bottom-color: #ff6f00;
-        border-radius: 30px;
-    }
-
-    .dropdown-panel ul.dropdown-menu {
-        margin-right: -50px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        background-color: #37474f;
-        border: 1px solid rgba(0,0,0,.15);
-    }
-
-    .dropdown-panel ul.dropdown-ul:before {
-        background: none;
-    }
-
-    .dropdown-panel ul li a.dropdown-item {
-        color: #cfd8dc;
-    }
-
-        .dropdown-panel ul li a.dropdown-item:hover {
-            color: #cfd8dc;
-            background-color: #546e7a;
-        }
-
-        .dropdown-panel ul li a.dropdown-item:focus {
-            color: #cfd8dc;
-            background-color: #607d8b;
-        }
-</style>
-
 @code{
     Login Login { get; set; }
     UserInfoDTO UserInfoDTO = new UserInfoDTO();
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity.IsAuthenticated)
-        {
-            Interceptor.RegisterEvent();
-        }
+        //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        //var user = authState.User;
+        //if (user.Identity.IsAuthenticated)
+        //{
+        //    Interceptor.RegisterEvent();
+        //}
 
-        var expireToken = await http.GetFromJsonAsync<bool>("api/accounts/expire-token");
-        if (expireToken == true)
-        {
-            navigation.NavigateTo("/logout");
-        }
+        //var expireToken = await http.GetFromJsonAsync<bool>("api/accounts/expire-token");
+        //if (expireToken == true)
+        //{
+        //    navigation.NavigateTo("/logout");
+        //}
     }
 
     public void Dispose() => Interceptor.DisposeEvent();

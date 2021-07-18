@@ -34,9 +34,9 @@
             <div class="form-group @visibleUpload">
                 @if (disableUpload)
                 {
-                    <label for="input" class="btn btn-secondary rounded-pill">
-                        Upload Image <i class="bi bi-cloud-upload"></i>
-                    </label>
+                    <button class="btn btn-secondary rounded-pill">
+                        <i class="bi bi-cloud-upload pe-2 align-middle"></i>Upload Image
+                    </button>
                 }
                 <InputFile id="input" OnChange="@OnChangeImage" @bind-Value="@Post.Picture" class="form-control" hidden accept=".png, .jpg" />
                 <ValidationMessage For="@(() => Post.Picture)" />

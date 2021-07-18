@@ -10,7 +10,6 @@
 @using System.Text.Json
 
 <div class="row register justify-content-center">
-
     <div class="col-md-6 col-10 pt-4">
         <h1 class="text-white">Register</h1>
 
@@ -27,57 +26,46 @@
             <div class="card-body">
                 <EditForm EditContext="editContext" OnValidSubmit="HandleRegistration">
                     <DataAnnotationsValidator />
-
-                    <div class="form-group">
-                        <label for="username">نام کاربری</label>
+                    <div class="form-group mt-3">
+                        <label for="username">Name</label>
                         <InputText Id="username" class="form-control" @bind-Value="RegisterModel.UserName" />
                         <ValidationMessage For="@(() => RegisterModel.UserName)" />
                     </div>
-                    <div class="form-group">
-                        <label for="email2">ایمیل</label>
+                    <div class="form-group mt-3">
+                        <label for="email2">Email</label>
                         <InputText Id="email2" type="email" class="form-control" @bind-Value="RegisterModel.Email" />
                         <ValidationMessage For="@(() => RegisterModel.Email)" />
                     </div>
-                    <div class="form-group">
-                        <div class="form-row rtl">
-                            <div class="col-3">
-                                @if (disableUpload)
-                                {
-                                    <label for="input" class="btn btn-secondary rounded-pill">
-                                        @*<Icon Type="upload" Theme="outline" />*@  عکس پروفایل
-                                    </label>
-                                }
-                                <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
-                            </div>
-                            <div class="col-9">
-                                <ValidationMessage For="() => RegisterModel.Picture" />
-                            </div>
-                        </div>
-
-                        @if (imgUrl != null)
+                    <div class="form-group mt-3">
+                        @if (disableUpload)
                         {
-                            <div class="d-flex flex-row shadow float-right border border-secondary bg-light rounded w-100">
-                                <img class="m-2" src="@imgUrl" style="width:60px; height: 40px;" />
-                                <p class="p-2 mt-2 text-success float-left overflow-hidden text-nowrap">@RegisterModel.FileName</p>
+                            <button class="btn btn-secondary rounded-pill">
+                                <i class="bi bi-cloud-upload pe-2 align-middle"></i>Image Profile
+                            </button>
+                        }
+                        <InputFile id="input" OnChange="@OnChangeImage" class="form-control" hidden accept=".png, .jpg" />
+                        <ValidationMessage For="() => RegisterModel.Picture" />
+
+                        @if (ImgUrl != null)
+                        {
+                            <div class="d-flex flex-row col-md-6 shadow border border-secondary bg-light rounded mt-2">
+                                <img class="m-2" src="@ImgUrl" style="width:60px; height: 40px;" />
+                                <p class="p-2 mt-2 text-success overflow-hidden text-nowrap">@RegisterModel.FileName</p>
                             </div>
-                            <br />
-                            <br />
-                            <br />
                         }
                     </div>
-                    <div class="form-group">
-                        <label for="password1">پسورد</label>
+                    <div class="form-group mt-3">
+                        <label for="password1">Password</label>
                         <InputText Id="password1" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
                         <ValidationMessage For="@(() => RegisterModel.Password)" />
                     </div>
-                    <div class="form-group">
-                        <label for="password2">تکرار پسورد</label>
+                    <div class="form-group mt-3">
+                        <label for="password2">Confirm Password</label>
                         <InputText Id="password2" type="password" class="form-control" @bind-Value="RegisterModel.ConfirmPassword" />
                         <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
                     </div>
-                    <button type="submit" class="@submitButton">
-                        ثبت نام
-                        @*<Icon Type="user-add" Theme="outline" />*@
+                    <button type="submit" class="@submitButton mt-4">
+                        Register
                     </button>
                 </EditForm>
             </div>
@@ -88,7 +76,7 @@
 
 <style>
     .register {
-        margin-top: -10px;
+        margin-top: -2.1rem;
         padding-bottom: 200px;
         background: linear-gradient(270deg, #d81b60, #8e24aa, #0288d1);
         background-size: 600% 600%;
@@ -116,7 +104,7 @@
     private bool ShowErrors = false;
     private IEnumerable<string> Errors;
 
-    public string imgUrl { get; set; }
+    public string ImgUrl { get; set; }
     private EditContext editContext;
     MultipartFormDataContent content = new();
     bool disableUpload = true;
@@ -177,7 +165,7 @@
 
         await fileStream.CopyToAsync(memoryStream);
 
-        imgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+        ImgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
     }
 
     void DisableButton(bool status)
