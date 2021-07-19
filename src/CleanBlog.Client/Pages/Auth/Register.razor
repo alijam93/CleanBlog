@@ -1,13 +1,7 @@
 ﻿@page "/register"
 @inject IAuthService AuthService
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigation
 @inject HttpClient http
-@using System.Net.Http.Headers
-@using System.IO
-@using CleanBlog.Client.Utils.Models
-@using CleanBlog.Shared.Features.File
-@using System.Text
-@using System.Text.Json
 
 <div class="row register justify-content-center">
     <div class="col-md-6 col-10 pt-4">
@@ -37,7 +31,7 @@
                         <ValidationMessage For="@(() => RegisterModel.Email)" />
                     </div>
                     <div class="form-group mt-3">
-                        @if (disableUpload)
+                        @if (disable)
                         {
                             <label for="input" class="btn btn-secondary rounded-pill">
                                 <i class="bi bi-cloud-upload pe-2 align-middle"></i>Image Profile
@@ -97,86 +91,3 @@
         }
     }
 </style>
-
-@code {
-
-    private RegisterVM RegisterModel = new();
-    private bool ShowErrors = false;
-    private IEnumerable<string> Errors;
-
-    public string ImgUrl { get; set; }
-    private EditContext editContext;
-    MultipartFormDataContent content = new();
-    bool disableUpload = true;
-
-    string submitButton = "btn btn-primary";
-
-    protected override void OnInitialized()
-    {
-        editContext = new EditContext(RegisterModel);
-    }
-
-    private async Task HandleRegistration()
-    {
-        DisableButton(true);
-
-        if (RegisterModel.Picture != null)
-        {
-            var resultUpload = await http.PostAsync("api/photo/addAvatar", content);
-            var uploadAddress = await resultUpload.Content.ReadAsStringAsync();
-            if (resultUpload.IsSuccessStatusCode)
-            {
-                RegisterModel.Avatar = uploadAddress.Trim('"');
-                disableUpload = false;
-            }
-        }
-
-
-        var result = await AuthService.Register(RegisterModel);
-
-        if (result.Successful)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            await http.PostAsJsonAsync($"api/photo/deleteFile", new DeleteFile { Path = RegisterModel.Avatar });
-            Errors = result.Errors;
-            ShowErrors = true;
-            DisableButton(false);
-        }
-    }
-
-    async Task OnChangeImage(InputFileChangeEventArgs e)
-    {
-        RegisterModel.Picture = e.File;
-        RegisterModel.FileName = e.File.Name;
-        editContext.NotifyFieldChanged(FieldIdentifier.Create(() => RegisterModel.Picture));
-        var format = "image/jpeg";
-        var resizedFile = await e.File.RequestImageFileAsync(format, 300, 200);
-        using var ms = resizedFile.OpenReadStream(resizedFile.Size);
-        await InvokeAsync(StateHasChanged);
-
-        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
-        content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "Image", resizedFile.Name);
-
-        using var memoryStream = new MemoryStream();
-        using var fileStream = resizedFile.OpenReadStream(1024 * 1024 * 15);
-
-        await fileStream.CopyToAsync(memoryStream);
-
-        ImgUrl = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
-    }
-
-    void DisableButton(bool status)
-    {
-        if (status == true)
-        {
-            submitButton = "btn btn-secondary button-disable";
-        }
-        else
-        {
-            submitButton = "btn btn-primary";
-        }
-    }
-}

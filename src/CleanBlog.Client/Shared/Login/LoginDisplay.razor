@@ -10,25 +10,21 @@
         <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    @*<img class="rounded-circle" src="https://us.123rf.com/450wm/mialima/mialima1603/mialima160300025/55096766-male-user-icon-isolated-on-a-white-background-account-avatar-for-web-user-profile-picture-unknown-ma.jpg?ver=6" width="32" height="28">
-                        Name*@
-                    @context.User.Identity.Name
                     <img class="rounded-circle" src="@context.User.FindFirst("avatar_path").Value" width="32" height="28">
+                    @context.User.Identity.Name
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg-end me-3" aria-labelledby="navbarDropdown">
                     <li>
-                        <a class="dropdown-item" href="/panel/admin">
-                            <Icon Type="audit" Theme="outline" />
+                        <a class="dropdown-item" href="panel/dashboard">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar" viewBox="0 0 16 16">
                                 <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H5zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2V2z" />
                             </svg>
-                            <span class="p-1">go to panel</span>
+                            <span class="p-1">Dashboard</span>
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item text-danger" href="LogOut">
-                            <Icon Type="logout" Theme="outline" />
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
                                 <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
@@ -73,18 +69,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        //var user = authState.User;
-        //if (user.Identity.IsAuthenticated)
-        //{
-        //    Interceptor.RegisterEvent();
-        //}
-
-        //var expireToken = await http.GetFromJsonAsync<bool>("api/accounts/expire-token");
-        //if (expireToken == true)
-        //{
-        //    navigation.NavigateTo("/logout");
-        //}
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            Interceptor.RegisterEvent();
+        }
     }
 
     public void Dispose() => Interceptor.DisposeEvent();
