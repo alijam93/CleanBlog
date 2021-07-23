@@ -43,10 +43,7 @@ namespace CleanBlog.Api.Controllers.Admin
             var user = await _userManager.FindByIdAsync(userModel.Id);
             if (user == null) return NotFound("User not found.");
             var currentRole = await _userManager.GetRolesAsync(user);
-
-            //bool isAdminUser = await _userManager.IsInRoleAsync(user, Policies.IsAdmin);
-            //if (!isAdminUser)
-            //{ 
+  
             await _userManager.RemoveFromRolesAsync(user, currentRole);
             await _userManager.AddToRoleAsync(user, userModel.RoleName);
 

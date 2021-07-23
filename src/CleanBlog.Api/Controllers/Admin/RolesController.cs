@@ -49,11 +49,6 @@ namespace CleanBlog.Api.Controllers.Admin
             var role = await _roleManager.FindByIdAsync(roleDto.Id);
             if (role == null) return NotFound();
 
-            //if (role.Name == Policies.IsAdmin)
-            //{
-            //    return BadRequest();
-            //}
-
             role.Name = roleDto.Name;
 
             await _roleManager.UpdateAsync(role);
